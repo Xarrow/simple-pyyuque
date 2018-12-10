@@ -26,13 +26,25 @@ if sys.version > '3':
 from simple_pyyuque import SimplePyYuQueAPI
 
 if __name__ == '__main__':
-    y = SimplePyYuQueAPI(token="LIpEyM947oR2ZjmEdgCd6ByKPQUlLd39UrrtXVlS", app_name="py_yuque1")
+    y = SimplePyYuQueAPI(token="token", app_name="py_yuque1")
 
     # User
     print(y.get_user().base_response)
     print(y.user)
     print(y.get_user_docs().base_response)
     print(y.get_user_recent_updated().base_response)
+
+    # Group
+    print("get_users_groups ==>%s " % y.get_users_groups(login="Helixcs").base_response)
+    print("get_groups ==>%s " % y.get_public_groups().base_response)
+    print("public_groups ==>%s " % y.public_groups.base_response)
+    # print("post_groups ==>%s " % y.post_group(name="測試Group", login="Helixcs1", description="測試Group 描述").base_response)
+    # print("create_group ==>%s " % y.create_group(name="測試Group", login="Helixcs1", description="測試Group 描述").base_response)
+    print("get_groups_detail ==>%s " % y.get_groups_detail(login="Helixcs1").base_response)
+    print("put_groups ==>%s " % y.put_groups(login="Helixcs1", name="更新 測試Group",
+                                             login_update="Helixcs1_group_update").base_response)
+    # print("update_groups ==>%s " % y.update_groups(login="Helixcs1",name="更新 測試Group",login_update="Helixcs1_group_update").base_response)
+    print("get_groups_users ==>%s " % y.get_groups_users(login="Helixcs1").base_response)
 
     # Repo
     print(y.get_users_repos(login="Helixcs").base_response)

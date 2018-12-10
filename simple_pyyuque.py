@@ -37,7 +37,8 @@ except Exception as ex:
 
 IS_DEBUG = logger.level == logging.DEBUG
 BASIC_URL = 'https://www.yuque.com/api/v2/'
-MESSAGE_TEMPLATE_A = """# {method_name} , `{p1}` and `{p2}` can not both be blank ! For further API detail please visit `{doc_uri}` """
+MESSAGE_TEMPLATE_A = """# {method_name} , `{p1}` and `{p2}` can not both be blank ! For further API detail please 
+visit `{doc_uri}` """
 MESSAGE_TEMPLATE_B = """# {method_name} , `{p1}` is not blank ! For further API detail please visit `{doc_uri}` """
 
 
@@ -90,6 +91,12 @@ class UserDescriptionType(Enum):
     DOC = "Doc"
     # Book - 知识库
     BOOK = "Book"
+
+
+class GroupUserRole(Enum):
+    # 0 - 管理员, 1 - 普通成员
+    ADMINISTRATOR = 0
+    USER = 1
 
 
 class RepoType(Enum):
@@ -1028,7 +1035,7 @@ class SimplePyYuQueAPI(Base):
         return self._get_api_request(source_name="/users/{}/groups".format(login if is_not_blank(login) else id),
                                      res_type=UserSerializerList)
 
-    def get_users_groups(self) -> Optional[UserSerializerList]:
+    def get_public_groups(self) -> Optional[UserSerializerList]:
         """
         获取公开组织列表
         :return:
@@ -1036,8 +1043,8 @@ class SimplePyYuQueAPI(Base):
         return self._get_api_request(source_name="/groups", res_type=UserSerializerList)
 
     @property
-    def users_groups(self) -> Optional[UserSerializerList]:
-        return self.get_users_groups()
+    def public_groups(self) -> Optional[UserSerializerList]:
+        return self.get_public_groups()
 
     def post_group(self, name: str, login: str, description: str = "") -> Optional[UserSerializer]:
         """
@@ -1064,7 +1071,7 @@ class SimplePyYuQueAPI(Base):
     def create_group(self, **kwargs) -> Optional[UserSerializer]:
         return self.post_group(**kwargs)
 
-    def get_groups(self, id: int = None, login: str = None) -> Optional[UserSerializer]:
+    def get_groups_detail(self, id: int = None, login: str = None) -> Optional[UserSerializer]:
         """
         获取单个组织的详细信息
         GET /groups/:login
@@ -1081,10 +1088,11 @@ class SimplePyYuQueAPI(Base):
         return self._get_api_request(source_name="/groups/{}".format(id if is_not_blank(id) else login),
                                      res_type=UserSerializer)
 
-    def get_group_detail(self, **kwargs) -> Optional[UserSerializer]:
-        return self.get_groups(**kwargs)
-
-    def put_groups(self, login: str = None, id: int = None, name: str = None, login_update: str = None,
+    def put_groups(self,
+                   login: str = None,
+                   id: int = None,
+                   name: str = None,
+                   login_update: str = None,
                    description: str = "") -> Optional[UserSerializer]:
         """
         更新单个组织的详细信息
@@ -1146,11 +1154,69 @@ class SimplePyYuQueAPI(Base):
         return self._get_api_request(source_name="/groups/{}/users".format(login if is_not_blank(login) else id),
                                      res_type=GroupUserSerializerList)
 
-    def put_groups_users(self):
-        """
+    def put_groups_users(self,
+                         group_login: str = None,
+                         group_id: int = None,
+                         login: str = None,
+                         role: Union[int, GroupUserRole] = GroupUserRole.USER) -> Optional[GroupUserSerializer]:
 
+        """
+        增加或更新组织成员
+
+        PUT /groups/:group_login/users/:login
+        # 或
+        PUT /groups/:group_id/users/:login
+        :param role:                0 - 管理员, 1 - 普通成员
+        :param group_login:
+        :param group_id:
+        :param login:
         :return:
         """
+        if is_blank(group_login) and is_blank(group_id):
+            message = MESSAGE_TEMPLATE_A.format(method_name="put_groups_users", p1="group_login", p2="group_id",
+                                                doc_uri="https://www.yuque.com/yuque/developer/group")
+            raise YuQueAPIException(message)
+        if is_blank(login):
+            message = MESSAGE_TEMPLATE_B.format(method_name="put_groups_users", p1="login",
+                                                doc_uri="https://www.yuque.com/yuque/developer/group")
+            raise YuQueAPIException(message)
+        data = {"role": role.value if isinstance(role, GroupUserRole) else role}
+        return self._put_api_request(
+            source_name="/groups/{0}/users/{1}".format(group_login if is_not_blank(group_login) else group_id, login),
+            res_type=GroupUserSerializer,
+            data=data)
+
+    def update_group_users(self, **kwargs):
+        return self.put_groups_users(**kwargs)
+
+    def delete_groups_users(self,
+                            group_login: str = None,
+                            group_id: int = None,
+                            login: str = None) -> Optional[GroupUserSerializer]:
+
+        """
+        删除组织成员
+        PUT /groups/:group_login/users/:login
+        # 或
+        PUT /groups/:group_id/users/:login
+        :param group_login:
+        :param group_id:
+        :param login:
+        :return:
+        """
+        if is_blank(group_login) and is_blank(group_id):
+            message = MESSAGE_TEMPLATE_A.format(method_name="delete_groups_users", p1="group_login", p2="group_id",
+                                                doc_uri="https://www.yuque.com/yuque/developer/group")
+            raise YuQueAPIException(message)
+        if is_blank(login):
+            message = MESSAGE_TEMPLATE_B.format(method_name="delete_groups_users", p1="login",
+                                                doc_uri="https://www.yuque.com/yuque/developer/group")
+            raise YuQueAPIException(message)
+
+        return self._delete_api_request(
+            source_name="/groups/{0}/users/{1}".format(group_login if is_not_blank(group_login) else group_id, login),
+            res_type=GroupUserSerializer)
+
     # Repo - 仓库
     # @See https://www.yuque.com/yuque/developer/rep
     def get_users_repos(self,
