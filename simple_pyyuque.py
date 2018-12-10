@@ -76,13 +76,6 @@ class StatusCode(Enum):
     SERVER_OPS = {"code": 500, "message": "服务器异常", }
 
 
-class DescriptionType(Enum):
-    # Doc - 文档
-    DOC = "Doc"
-    # Book - 知识库
-    BOOK = "Book"
-
-
 class RequestMethods(Enum):
     GET = "GET"
     POST = "POST"
@@ -90,6 +83,13 @@ class RequestMethods(Enum):
     HEAD = "HEAD"
     DELETE = "DELETE"
     OPTIONS = "OPTIONS"
+
+
+class UserDescriptionType(Enum):
+    # Doc - 文档
+    DOC = "Doc"
+    # Book - 知识库
+    BOOK = "Book"
 
 
 class RepoType(Enum):
@@ -762,6 +762,50 @@ class DocDetailSerializer(BaseSerializer):
         return "DocDetailSerializer=<{} .....>".format(self.id)
 
 
+class GroupUserSerializer(BaseSerializer):
+    def __init__(self, group_user_response: dict):
+        super().__init__(group_user_response)
+
+    @property
+    def group_user_response(self) -> Optional[dict]:
+        return self.group_user_response
+
+    @group_user_response.setter
+    def group_user_response(self, value) -> None:
+        self.group_user_response = value
+
+    @property
+    def id(self) -> Optional[int]:
+        return self.base_response.get('id') if self.base_response is not None else None
+
+    @property
+    def group_id(self) -> Optional[int]:
+        return self.base_response.get('group_id') if self.base_response is not None else None
+
+    @property
+    def user_id(self) -> Optional[int]:
+        return self.base_response.get('user_id') if self.base_response is not None else None
+
+    @property
+    def role(self) -> Optional[int]:
+        return self.base_response.get('role') if self.base_response is not None else None
+
+    @property
+    def created_at(self) -> Optional[str]:
+        return self.base_response.get('created_at') if self.base_response is not None else None
+
+    @property
+    def updated_at(self) -> Optional[str]:
+        return self.base_response.get('updated_at') if self.base_response is not None else None
+
+    @property
+    def user(self) -> Optional[UserSerializer]:
+        return UserSerializer(user_response=self.base_response.get('user')) if self.base_response is not None else None
+
+    def __repr__(self):
+        return "GroupUserSerializer=<{} ......>".format(self.id)
+
+
 class DocSerializerList(BaseSerializer):
     def __init__(self, base_response: dict) -> None:
         super().__init__(base_response)
@@ -809,6 +853,16 @@ class DocDetailSerializerList(BaseSerializer):
     @property
     def doc_detail_serializer_list(self) -> Optional[DocDetailSerializer]:
         return [DocDetailSerializer(doc_detail_response=doc) for doc in
+                self.base_response] if self.base_response is not None else None
+
+
+class GroupUserSerializerList(BaseSerializer):
+    def __init__(self, base_response: dict):
+        super().__init__(base_response)
+
+    @property
+    def group_user_serializer_list(self) -> Optional[DocDetailSerializer]:
+        return [GroupUserSerializer(group_user_response=doc) for doc in
                 self.base_response] if self.base_response is not None else None
 
 
@@ -888,72 +942,215 @@ class SimplePyYuQueAPI(Base):
             return None if res is None else res_type(res)
         return res
 
+    # User - 用户
     # @See https://www.yuque.com/yuque/developer/user
-    def user(self) -> Optional[UserSerializer]:
+    def get_user(self) -> Optional[UserSerializer]:
+        """
+        获取认证的用户的个人信息,获取当前 Token 对应的用户的个人信息。
+
+        :return:
+        """
         res = self._api_request(method=RequestMethods.GET, source_name="user")
         return None if res is None else UserSerializer(user_response=res)
 
-    def users(self, id: int = None, login: str = None) -> Optional[UserSerializer]:
+    @property
+    def user(self) -> Optional[UserSerializer]:
+        return self.get_user()
+
+    def get_users(self, id: int = None, login: str = None) -> Optional[UserSerializer]:
+        """
+        获取单个用户信息,基于用户 login 或 id 获取一个用户的基本信息。
+
+        GET /users/:login
+        # 或
+        GET /users/:id
+        :param id:
+        :param login:
+        :return:
+        """
         if is_blank(id) and is_blank(login):
-            message = "#users , id and login can not be both blank !"
+            message = MESSAGE_TEMPLATE_A.format(method_name="get_users", p1="id", p2="login",
+                                                doc_uri="https://www.yuque.com/yuque/developer/user")
             raise YuQueAPIException(message)
-        res = self._api_request(method=RequestMethods.GET,
-                                source_name="users/{}".format(id if is_not_blank(id) else login))
-        return None if res is None else UserSerializer(user_response=res)
+        return self._get_api_request(source_name="users/{}".format(id if is_not_blank(id) else login),
+                                     res_type=UserSerializer)
 
-    def user_docs(self, q: str = None, offset: int = 1) -> Optional[DocSerializerList]:
+    def get_user_docs(self, q: str = "", offset: int = 1) -> Optional[DocSerializerList]:
+        """
+        获取我创建的文档
+
+        :param q:       文档标题模糊搜索
+        :param offset:  用于分页，效果类似 MySQL 的 limit offset，一页 20 条
+        :return:         Optional[DocSerializerList]
+        """
         params = {"q": q, "offset": offset}
-        res = self._api_request(method=RequestMethods.GET, source_name="/user/docs", params=params)
-        return None if res is not None else DocSerializerList(base_response=res)
+        return self._get_api_request(source_name="/user/docs",
+                                     res_type=DocSerializerList,
+                                     params=params)
 
-    def user_recent_updated(self, type: Union[DescriptionType, str], offset: int = 1) -> \
-            Optional[Union[DocSerializerList, BookSerializerList]]:
-        allowed_type = [DescriptionType.DOC.name, DescriptionType.BOOK.name]
-        if type.upper() not in allowed_type:
-            message = "#user_recent_updated , type not be allowed !"
-            raise YuQueAPIException(message)
-        type = type[0].upper() + str(type[1:len(type)]).lower()
-        params = {"type": type, "offset": offset}
-        res = self._api_request(method=RequestMethods.GET, source_name="/user/recent-updated", params=params)
+    def get_user_recent_updated(self,
+                                type: Union[UserDescriptionType, str] = UserDescriptionType.BOOK,
+                                offset: int = 1) -> Optional[Union[DocSerializerList, BookSerializerList]]:
+        """
+        获取我最近参与的文档/知识库
+
+        :param type:        Doc - 文档,Book - 知识库
+        :param offset:      用于分页，效果类似 MySQL 的 limit offset，一页 20 条
+        :return:            Optional[Union[DocSerializerList, BookSerializerList]]
+        """
+        params = {"type": type.value if isinstance(type, UserDescriptionType) else
+        type[0].upper() + str(type[1:len(type)]).lower(), "offset": offset}
+        res = self._get_api_request(source_name="/user/recent-updated",
+                                    res_type=None, params=params)
         if res is None: return res
-        if type == DescriptionType.DOC.value:
+        if type == UserDescriptionType.DOC:
             return DocSerializerList(base_response=res)
-        elif type == DescriptionType.BOOK.value:
+        elif type == UserDescriptionType.BOOK:
             return BookSerializerList(base_response=res)
         return None
 
+    # Group - 组织
     # @See https://www.yuque.com/yuque/developer/group
-    def users_groups(self, login: str = None, id: int = None) -> Optional[UserSerializerList]:
+    def get_users_groups(self,
+                         login: str = None,
+                         id: int = None) -> Optional[UserSerializerList]:
+        """
+        获取某个用户的加入的组织列表
+
+        :param login:
+        :param id:
+        :return:
+        """
         if is_blank(id) and is_blank(login):
-            message = "#users_groups , id and login can not be both blank !"
+            message = MESSAGE_TEMPLATE_A.format(method_name="get_users_groups", p1="login", p2="id",
+                                                doc_uri="https://www.yuque.com/yuque/developer/group")
             raise YuQueAPIException(message)
-        res = self._api_request(method=RequestMethods.GET, source_name="/users/{}/groups"
-                                .format(login if is_not_blank(login) else id))
-        return None if res is None else UserSerializerList(base_response=res)
+        return self._get_api_request(source_name="/users/{}/groups".format(login if is_not_blank(login) else id),
+                                     res_type=UserSerializerList)
 
-    def groups(self) -> Optional[UserSerializerList]:
-        res = self._api_request(method=RequestMethods.GET, source_name="/groups", )
-        return None if res is None else UserSerializerList(base_response=res)
+    def get_users_groups(self) -> Optional[UserSerializerList]:
+        """
+        获取公开组织列表
+        :return:
+        """
+        return self._get_api_request(source_name="/groups", res_type=UserSerializerList)
 
-    # #TODO
-    def create_group(self, name: str, login: str, description: str) -> Optional[UserSerializer]:
+    @property
+    def users_groups(self) -> Optional[UserSerializerList]:
+        return self.get_users_groups()
+
+    def post_group(self, name: str, login: str, description: str = "") -> Optional[UserSerializer]:
+        """
+        创建 Group
+        :param name:            组织名称
+        :param login:           login
+        :param description:     描述
+        :return:
+        """
         if is_blank(name):
-            raise YuQueAPIException("")
+            message = MESSAGE_TEMPLATE_B.format(method_name="post_group", p1="name",
+                                                doc_uri="https://www.yuque.com/yuque/developer/group")
+            raise YuQueAPIException(message)
         if is_blank(login):
-            raise YuQueAPIException("")
-        if is_blank(description):
-            raise YuQueAPIException("")
+            message = MESSAGE_TEMPLATE_B.format(method_name="post_group", p1="login",
+                                                doc_uri="https://www.yuque.com/yuque/developer/group")
+            raise YuQueAPIException(message)
+
         data = {"name": name, "login": login, "description": description}
-        res = self._api_request(method=RequestMethods.POST, source_name="/groups", data=data)
-        print(res)
-        return None if res is None else UserSerializer(user_response=res)
+        return self._post_api_request(source_name="/groups",
+                                      res_type=UserSerializer,
+                                      data=data)
 
-    def group_users(self, id: int = None, login: str = None):
+    def create_group(self, **kwargs) -> Optional[UserSerializer]:
+        return self.post_group(**kwargs)
+
+    def get_groups(self, id: int = None, login: str = None) -> Optional[UserSerializer]:
+        """
+        获取单个组织的详细信息
+        GET /groups/:login
+        # 或
+        GET /groups/:id
+        :param id:
+        :param login:
+        :return:
+        """
         if is_blank(id) and is_blank(login):
-            pass
-        res = self._api_request(method=RequestMethods.GET,
-                                source_name="/groups/{}/users".format(id if is_not_blank(id) else login))
+            message = MESSAGE_TEMPLATE_A.format(method_name="get_groups", p1="id", p2="login",
+                                                doc_uri="https://www.yuque.com/yuque/developer/group")
+            raise YuQueAPIException(message)
+        return self._get_api_request(source_name="/groups/{}".format(id if is_not_blank(id) else login),
+                                     res_type=UserSerializer)
 
+    def get_group_detail(self, **kwargs) -> Optional[UserSerializer]:
+        return self.get_groups(**kwargs)
+
+    def put_groups(self, login: str = None, id: int = None, name: str = None, login_update: str = None,
+                   description: str = "") -> Optional[UserSerializer]:
+        """
+        更新单个组织的详细信息
+
+        PUT /groups/:login
+        # 或
+        PUT /groups/:id
+        :param login:
+        :param id:
+        :param name:
+        :param login_update:
+        :param description:
+        :return:
+        """
+        if is_blank(login) and is_blank(id):
+            message = MESSAGE_TEMPLATE_A.format(method_name="put_groups", p1="login", p2="id",
+                                                doc_uri="https://www.yuque.com/yuque/developer/group")
+            raise YuQueAPIException(message)
+        data = {"name": name, "login": login_update, "description": description}
+        return self._put_api_request(source_name="/groups/{}".format(login if is_not_blank(login) else id),
+                                     res_type=UserSerializer, data=data)
+
+    def update_groups(self, **kwargs) -> Optional[UserSerializer]:
+        return self.put_groups(**kwargs)
+
+    def delete_groups(self, login: str = None, id: int = None):
+        """
+        删除组织
+        DELETE /groups/:login
+        # 或
+        DELETE /groups/:id
+        :param login:
+        :param id:
+        :return:
+        """
+        if is_blank(login) and is_blank(id):
+            message = MESSAGE_TEMPLATE_A.format(method_name="delete_groups", p1="login", p2="id",
+                                                doc_uri="https://www.yuque.com/yuque/developer/group")
+            raise YuQueAPIException(message)
+
+        return self._delete_api_request(source_name="/groups/{}".format(login if is_not_blank(login) else id),
+                                        res_type=UserSerializer)
+
+    def get_groups_users(self, login: str = None, id: int = None) -> Optional[GroupUserSerializerList]:
+        """
+        获取组织成员信息
+        GET /groups/:login/users
+        # 或
+        GET /groups/:id/users
+        :param login:
+        :param id:
+        :return:
+        """
+        if is_blank(login) and is_blank(id):
+            message = MESSAGE_TEMPLATE_A.format(method_name="get_groups_users", p1="login", p2="id",
+                                                doc_uri="https://www.yuque.com/yuque/developer/group")
+            raise YuQueAPIException(message)
+
+        return self._get_api_request(source_name="/groups/{}/users".format(login if is_not_blank(login) else id),
+                                     res_type=GroupUserSerializerList)
+
+    def put_groups_users(self):
+        """
+
+        :return:
+        """
     # Repo - 仓库
     # @See https://www.yuque.com/yuque/developer/rep
     def get_users_repos(self,

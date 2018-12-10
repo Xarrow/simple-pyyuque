@@ -26,7 +26,14 @@ if sys.version > '3':
 from simple_pyyuque import SimplePyYuQueAPI
 
 if __name__ == '__main__':
-    y = SimplePyYuQueAPI(token="Token", app_name="py_yuque1")
+    y = SimplePyYuQueAPI(token="LIpEyM947oR2ZjmEdgCd6ByKPQUlLd39UrrtXVlS", app_name="py_yuque1")
+
+    # User
+    print(y.get_user().base_response)
+    print(y.user)
+    print(y.get_user_docs().base_response)
+    print(y.get_user_recent_updated().base_response)
+
     # Repo
     print(y.get_users_repos(login="Helixcs").base_response)
     # print(y.create_users_repos(login="Helixcs", name="daddadsaadsad", slug="").base_response)
@@ -38,7 +45,7 @@ if __name__ == '__main__':
     # Docs
     print(y.get_repos_docs(namespace="helixcs/tuyepi").base_response)
     print(y.get_repos_docs_detail(namespace="helixcs/tuyepi", slug="taosm3").base_response)
-    print(y.post_repos_docs(namespace="rn15gw/dyrs3g", slug="taosm31", title="测试", body="你好世界!").base_response)
-    print(y.put_repos_docs(namespace="rn15gw/dyrs3g", id=1040079, slug="taosm31", title="测试",
-                           body="你好世界! update").base_response)
-    print(y.delete_repos_docs(namespace="rn15gw/dyrs3g", id=1040082).base_response)
+    # print(y.post_repos_docs(namespace="rn15gw/dyrs3g", slug="taosm31", title="测试", body="你好世界!").base_response)
+    # print(y.put_repos_docs(namespace="rn15gw/dyrs3g", id=1040079, slug="taosm31", title="测试",
+    #                        body="你好世界! update").base_response)
+    # print(y.delete_repos_docs(namespace="rn15gw/dyrs3g", id=1040082).base_response)
