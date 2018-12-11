@@ -11,7 +11,6 @@
  Add New Functional simple_pyyuque
 """
 
-
 import logging
 import sys
 import asyncio
@@ -24,6 +23,7 @@ format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 datefmt = '%Y-%m-%d %H:%M'
 logging.basicConfig(level=level, format=format, datefmt=datefmt)
 logger = logging.getLogger(__name__)
+logger.setLevel(level)
 
 PY3_7 = False
 
@@ -33,7 +33,7 @@ try:
     PY3_7 = True if sys.version_info.minor == 7 else PY3_7
 
 except Exception as ex:
-    raise AssertionError("simple-pyyuque only support 3.6+.")
+    raise AssertionError("simple-pyyuque only support 3.6+ !")
 
 IS_DEBUG = logger.level == logging.DEBUG
 BASIC_URL = 'https://www.yuque.com/api/v2/'
@@ -885,10 +885,14 @@ class BaseAPI(object):
 
     def __init__(self, token: str, app_name: str, **kwargs):
         assert is_not_blank(value=token)
-        self._session = requests.Session()
-        self._loop = asyncio.get_event_loop()
         self._token = token
-        self._app_name = app_name or 'py_simple_yuque'
+        self._app_name = app_name
+        self._session = requests.Session()
+        if PY3_7:
+            #  TODO not test
+            self._loop = asyncio.get_running_loop() if self._loop.is_running() else asyncio.get_event_loop()
+        else:
+            self._loop = asyncio.get_event_loop()
         self._headers = {
             'User-agent': self._app_name,
             'Content-Type': 'application/x-www-form-urlencoded',
