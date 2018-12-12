@@ -2,6 +2,9 @@
 
 # Simple-PyYuQue
 
+[![Build Status](https://travis-ci.org/Xarrow/simple-pyyuque.svg?branch=master)](https://travis-ci.org/Xarrow/simple-pyyuque)
+[![codecov](https://codecov.io/gh/Xarrow/simple-pyyuque/branch/master/graph/badge.svg)](https://codecov.io/gh/Xarrow/simple-pyyuque)
+
 一个非官方的 [“语雀”](http://yuque.com) 的Python API 封装。提供和官方 API 类似的调用方式。设计简单，运行高效。
 
 详细文档说明参考[https://www.yuque.com/yuque/developer/api](https://www.yuque.com/yuque/developer/api)
