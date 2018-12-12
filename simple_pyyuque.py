@@ -905,9 +905,12 @@ class BaseAPI(object):
         elif isinstance(method, RequestMethods):
             kwargs['method'] = method.value
 
-        kwargs['url'] = BASIC_URL + \
-                        (source_name if not source_name.startswith("/") else source_name[1:len(source_name)])
+        kwargs['url'] = \
+            BASIC_URL + (source_name if not source_name.startswith("/") else source_name[1:len(source_name)])
         kwargs['headers'] = self._headers
+
+        if IS_DEBUG:
+            logger.debug("#_api_request , requests kwargs=%s" % kwargs)
 
         async def _inner_request():
             async def _a():
@@ -918,8 +921,9 @@ class BaseAPI(object):
         res = self._loop.run_until_complete(_inner_request())
         sc = res.status_code
         if sc != 200:
-            message = "#api_request , request failed , kwargs=%s , messages=%s - %s  , result=%s" % (
-                kwargs, sc, STATUS_CODE_MAPPING.get(sc), res.text)
+            message = "#_api_request , request failed , request kwargs=%s , messages=%s - %s  , result=%s  ,response headers=%s" % (
+                kwargs, sc, STATUS_CODE_MAPPING.get(sc), res.text, res.headers)
+            logger.error(message)
             raise YuQueAPIException(message)
         return res.json().get("data") if is_not_blank(res.json().get('data')) else None
 
@@ -954,6 +958,7 @@ class BaseAPI(object):
         return res
 
 
+# like as global instance
 class BaseRelation(object):
     def __init__(self):
         self._yuque_api = None
@@ -1043,9 +1048,9 @@ class SimplePyYuQueAPI(BaseAPI):
                 return BookSerializerList(base_response=res)
             return None
 
+    # Group - 组织
+    # @See https://www.yuque.com/yuque/developer/group
     class Group(BaseRelation):
-        # Group - 组织
-        # @See https://www.yuque.com/yuque/developer/group
         def get_users_groups(self,
                              login: str = None,
                              id: int = None) -> Optional[UserSerializerList]:
