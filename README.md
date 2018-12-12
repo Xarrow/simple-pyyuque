@@ -1,6 +1,6 @@
 # Simple-PyYuQue
 
-![img](pyyuque.png =100x20)
+<img src="pyyuque.png" height="100px" height="50px" />
 
 一个非官方的 [“语雀”](http://yuque.com) 的Python API 封装。提供和官方 API 类似的调用方式。设计简单高效。
 详细文档说明参考[https://www.yuque.com/yuque/developer/api](https://www.yuque.com/yuque/developer/api)
