@@ -1,9 +1,10 @@
 language: python
-python:
-  - "3.6"
-  - "3.6-dev"  # 3.6 development branch
-  - "3.7-dev"  # 3.7 development branch
-
+matrix:
+  include:
+    - python: 3.6
+    - python: 3.7
+      dist: xenial
+      sudo: true
 # command to install dependencies
 install:
   - pip install codecov
@@ -12,8 +13,9 @@ script:
   - coverage run test_simple_pyyuque.py
 after_success:
   - codecov
-
 notifications:
   email:
     recipients:
-      zhangjian
+      - zhangjian12424@gmail.com
+    on_success: always
+    on_failure: always
