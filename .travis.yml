@@ -1,0 +1,15 @@
+language: python
+python:
+  - "3.6"
+  - "3.6-dev"  # 3.6 development branch
+  - "3.7-dev"  # 3.7 development branch
+
+# command to install dependencies
+install:
+  - pip install tox
+  - pip install codecov
+  - pip install -r dev-requirements.txt
+script:
+  - coverage run test_simple_pyyuque.py
+after_success:
+  - codecov

@@ -2,7 +2,8 @@
 
 ![img](pyyuque.png =100x20)
 
-一个非官方的 [“语雀”](http://yuque.com) 的Python API 封装。提供和官方 API 类似的调用方式。设计简单高效。
+一个非官方的 [“语雀”](http://yuque.com) 的Python API 封装。提供和官方 API 类似的调用方式。设计简单，运行高效。
+
 详细文档说明参考[https://www.yuque.com/yuque/developer/api](https://www.yuque.com/yuque/developer/api)
 
 ----
@@ -18,9 +19,9 @@ TODO
 spyq = SimplePyYuQueAPI(token="token", app_name="py_yuque")
 
 ```
-其中 `token` 是在语雀中开发者 setting -> token 中申请 ， `app_name` 为你的应用名称。
+其中 `token` 是在语雀中 setting -> token 中申请 ， `app_name` 为你的应用名称。
 
-### 2. User 资源访问
+### 2. 简单调用
 
 * 获取认证的用户的个人信息
 
@@ -57,6 +58,21 @@ print("==> Helixcs is %s", user.get_users(login="Helixcs").base_response)
 
 ----
 # API 说明
+
+1. User 资源
+
+
+TODO
+
+2. Group 资源
+
+TODO
+
+3. Repo 资源
+TODO
+
+4. Doc 资源
+TODO
 
 ----
 # 问题排查
