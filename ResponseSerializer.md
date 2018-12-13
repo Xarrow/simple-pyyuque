@@ -68,7 +68,6 @@
 
 |属性|类型|示例|说明|
 |---|-----|----|----|
-
 |id|int|186611||
 |type|string|Book||
 |slug|string|dyrs3g||

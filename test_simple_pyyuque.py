@@ -26,7 +26,12 @@ class TestPyYuQue(unittest.TestCase):
     def test_get_users(self):
         assert user_api.get_users(login="Helixcs") is not None
 
-    def test_get_
+    def test_get_user_docs(self):
+        assert user_api.get_user_docs(q='', offset=1) is not None
+
+    def test_get_user_recent_updated(self):
+        assert user_api.get_user_recent_updated() is not None
+
 
 if __name__ == '__main__':
     unittest.main()

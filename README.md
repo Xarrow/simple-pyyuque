@@ -91,6 +91,7 @@ user.get_users(id=104023)
 
 ```python
 user.get_user_docs()
+user_api.get_user_docs(q='',offset=1)
 
 ```
 
