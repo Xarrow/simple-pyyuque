@@ -22,9 +22,9 @@ PY3 = False
 
 from simple_pyyuque import SimplePyYuQueAPI,UserDescriptionType
 
-user = SimplePyYuQueAPI(token="LIpEyM947oR2ZjmEdgCd6ByKPQUlLd39UrrtXVlS", app_name="py_yuque1").User()
+group = SimplePyYuQueAPI(token="LIpEyM947oR2ZjmEdgCd6ByKPQUlLd39UrrtXVlS", app_name="py_yuque1").Group()
 # User
-user_base = user.get_user_recent_updated(type=UserDescriptionType.BOOK)
+user_base = group.get_users_groups(login="Helixcs")
 
 ss = '''
 |属性|类型|示例|说明|

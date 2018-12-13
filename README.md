@@ -62,7 +62,7 @@ print("==> Helixcs is %s", user.get_users(login="Helixcs").base_response)
 ----
 # API 说明
 
-### 1. User 资源
+### 1. User 用户
 
 * 获取认证的用户的个人信息
 
@@ -109,9 +109,33 @@ user.get_user_recent_updated(type="Doc")
 返回: `Array<DocSerializer>` 或 `Array<BookSerializer>`
 
 
-### 2. Group 资源
+### 2. Group 组织
 
-TODO
+* 获取某个用户的加入的组织列表
+
+```python
+ group_api = SimplePyYuQueAPI(token="token", app_name="py_yuque1").User()
+ group_api.get_users_groups(login="Helixcs")
+
+```
+
+返回：`Array<UserSerializer>`
+
+* 获取公开组织列表
+
+```python
+group_api.get_public_groups()
+group_api.public_groups
+
+```
+
+返回：`Array<UserSerializer>`
+
+* 创建 Group
+
+```python
+```
+
 
 ### 3. Repo 资源
 
