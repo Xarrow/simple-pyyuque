@@ -23,7 +23,7 @@ PY3 = False
 if sys.version > '3':
     PY3 = True
 
-from simple_pyyuque import SimplePyYuQueAPI, logger
+from simple_pyyuque import SimplePyYuQueAPI, logger,UserDescriptionType
 
 logger.setLevel(logging.DEBUG)
 
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     print(user.user)
     print("==> Helixcs is %s" % user.get_users(login="Helixcs").base_response)
     print(user.get_user_docs().base_response)
-    print(user.get_user_recent_updated().base_response)
+    print(user.get_user_recent_updated(type=UserDescriptionType.BOOK).base_response)
 
     # Group
     group = SimplePyYuQueAPI(token="LIpEyM947oR2ZjmEdgCd6ByKPQUlLd39UrrtXVlS", app_name="py_yuque1").Group()

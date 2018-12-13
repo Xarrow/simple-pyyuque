@@ -20,11 +20,11 @@ logging.basicConfig(level=level, format=format, datefmt=datefmt)
 logger = logging.getLogger(__name__)
 PY3 = False
 
-from simple_pyyuque import SimplePyYuQueAPI
+from simple_pyyuque import SimplePyYuQueAPI,UserDescriptionType
 
 user = SimplePyYuQueAPI(token="LIpEyM947oR2ZjmEdgCd6ByKPQUlLd39UrrtXVlS", app_name="py_yuque1").User()
 # User
-user_base = user.get_user().base_response
+user_base = user.get_user_recent_updated(type=UserDescriptionType.BOOK)
 
 ss = '''
 |属性|类型|示例|说明|
@@ -32,9 +32,9 @@ ss = '''
 
 '''
 
-for k, v in user_base.items():
+for k, v in user_base.base_response[0].items():
     if isinstance(v, str):
-        _res = "str"
+        _res = "string"
     elif isinstance(v, int):
         _res = "int"
     elif isinstance(v, dict):

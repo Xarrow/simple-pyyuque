@@ -72,6 +72,8 @@ print("==> Helixcs is %s", user.get_users(login="Helixcs").base_response)
  print(user_api.user)
 ```
 
+返回: UserSerializer
+
 * 获取单个用户信息
 
 ```python
@@ -82,27 +84,7 @@ user.get_users(id=104023)
 
 ```
 
-|属性|类型|示例|说明|
-|---|-----|----|----|
-|id|int|104023||
-|type|str|User||
-|space_id|int|0||
-|account_id|int|10838||
-|login|str|helixcs||
-|name|str|Helixcs||
-|avatar_url|str|https://cdn.nlark.com/yuque/0/2018/png/104023/1539315567419-aad17f80-8365-4a08-af1e-e301a3c2c7f5.png||
-|large_avatar_url|str|https://cdn.nlark.com/yuque/0/2018/png/104023/1539315567419-aad17f80-8365-4a08-af1e-e301a3c2c7f5.png?x-oss-process=image/resize,m_fill,w_320,h_320||
-|medium_avatar_url|str|https://cdn.nlark.com/yuque/0/2018/png/104023/1539315567419-aad17f80-8365-4a08-af1e-e301a3c2c7f5.png?x-oss-process=image/resize,m_fill,w_160,h_160||
-|small_avatar_url|str|https://cdn.nlark.com/yuque/0/2018/png/104023/1539315567419-aad17f80-8365-4a08-af1e-e301a3c2c7f5.png?x-oss-process=image/resize,m_fill,w_80,h_80||
-|books_count|int|3||
-|public_books_count|int|2||
-|followers_count|int|3||
-|following_count|int|3||
-|public|int|1||
-|description|str|Java 糊口，Python 兴趣||
-|created_at|str|2018-04-23T02:43:33.000Z||
-|updated_at|str|2018-12-07T17:00:03.000Z||
-|_serializer|str|v2.user_detail||
+返回: UserSerializer
 
 
 * 获取我创建的文档
@@ -112,12 +94,18 @@ user.get_user_docs()
 
 ```
 
+返回: Array<DocSerializer>
+
 * 获取我最近参与的文档/知识库
 
 ```python
 user.get_user_recent_updated()
+user.get_user_recent_updated(type=UserDescriptionType.BOOK)
+user.get_user_recent_updated(type="Doc")
 
 ```
+
+返回: Array<DocSerializer> 或 Array<BookSerializer>
 
 -
 

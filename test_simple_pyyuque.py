@@ -26,6 +26,7 @@ class TestPyYuQue(unittest.TestCase):
     def test_get_users(self):
         assert user_api.get_users(login="Helixcs") is not None
 
+    def test_get_
 
 if __name__ == '__main__':
     unittest.main()
