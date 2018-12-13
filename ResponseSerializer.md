@@ -29,7 +29,7 @@
 
 
 -----
-##DocSerializer
+## DocSerializer
 
 文档基本信息，一般用在列表场景。
 
@@ -62,7 +62,8 @@
 
 
 ----
-BookSerializer
+## BookSerializer
+
 一般在列表的场景返回的仓库信息。
 
 |属性|类型|示例|说明|
