@@ -53,8 +53,8 @@
 |draft_version|int|0||
 |last_editor_id|int|104023||
 |word_count|int|0||
-|last_editor|<UserSerializer>|||
-|book|<BookSerializer>|||
+|last_editor|`<UserSerializer>`|||
+|book|`<BookSerializer>`|||
 |_serializer|string|v2.doc||
 
 
@@ -83,7 +83,7 @@
 |updated_at|string|2018-12-09T12:08:47.000Z||
 |created_at|string|2018-12-08T14:12:50.000Z||
 |namespace|string|rn15gw/dyrs3g||
-|user|<UserSerializer>|||
+|user|`<UserSerializer>`|||
 |_serializer|string|v2.book||
 
 详细文档参考：[https://www.yuque.com/yuque/developer/bookserializer](https://www.yuque.com/yuque/developer/bookserializer)
