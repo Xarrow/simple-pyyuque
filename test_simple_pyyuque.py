@@ -11,7 +11,7 @@
  Add New Functional TestPyYuQue
 """
 import unittest
-from .simple_pyyuque import SimplePyYuQueAPI
+from simple_pyyuque import SimplePyYuQueAPI
 
 lark_api = SimplePyYuQueAPI(token="LIpEyM947oR2ZjmEdgCd6ByKPQUlLd39UrrtXVlS", app_name="py_yuque1")
 user_api = lark_api.User()
