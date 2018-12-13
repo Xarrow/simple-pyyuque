@@ -888,11 +888,7 @@ class BaseAPI(object):
         self._token = token
         self._app_name = app_name
         self._session = requests.Session()
-        if PY3_7:
-            #  TODO not test
-            self._loop = asyncio.get_running_loop() if self._loop.is_running() else asyncio.get_event_loop()
-        else:
-            self._loop = asyncio.get_event_loop()
+        self._loop = asyncio.get_event_loop()
         self._headers = {
             'User-agent': self._app_name,
             'Content-Type': 'application/x-www-form-urlencoded',
