@@ -72,7 +72,7 @@ print("==> Helixcs is %s", user.get_users(login="Helixcs").base_response)
  print(user_api.user)
 ```
 
-返回: UserSerializer
+返回: `UserSerializer`
 
 * 获取单个用户信息
 
@@ -84,7 +84,7 @@ user.get_users(id=104023)
 
 ```
 
-返回: UserSerializer
+返回: `UserSerializer`
 
 
 * 获取我创建的文档
@@ -94,7 +94,7 @@ user.get_user_docs()
 
 ```
 
-返回: Array<DocSerializer>
+返回: `Array<DocSerializer>`
 
 * 获取我最近参与的文档/知识库
 
@@ -105,7 +105,7 @@ user.get_user_recent_updated(type="Doc")
 
 ```
 
-返回: Array<DocSerializer> 或 Array<BookSerializer>
+返回: `Array<DocSerializer>` 或 `Array<BookSerializer>`
 
 -
 
