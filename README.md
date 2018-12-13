@@ -108,7 +108,6 @@ user.get_user_recent_updated(type="Doc")
 
 返回: `Array<DocSerializer>` 或 `Array<BookSerializer>`
 
--
 
 ### 2. Group 资源
 
