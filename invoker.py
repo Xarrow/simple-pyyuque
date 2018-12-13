@@ -28,11 +28,7 @@ from simple_pyyuque import SimplePyYuQueAPI, logger
 logger.setLevel(logging.DEBUG)
 
 if __name__ == '__main__':
-    u = SimplePyYuQueAPI(token="token", app_name="py_yuque1").User().user
-    print(u)
-    user = SimplePyYuQueAPI(token="token", app_name="py_yuque1").User()
-
-    # user = SimplePyYuQueAPI.User(token="LIpEyM947oR2ZjmEdgCd6ByKPQUlLd39UrrtXVlS", app_name="py_yuque1")
+    user = SimplePyYuQueAPI(token="LIpEyM947oR2ZjmEdgCd6ByKPQUlLd39UrrtXVlS", app_name="py_yuque1").User()
     # User
     print(user.get_user().base_response)
     print(user.user)

@@ -1,6 +1,6 @@
 <img src="pyyuque.png" height="100px" height="50px" /> 
 
-# Simple-PyYuQue
+# Simple PyYuQue
 
 [![Build Status](https://travis-ci.org/Xarrow/simple-pyyuque.svg?branch=master)](https://travis-ci.org/Xarrow/simple-pyyuque)
 [![codecov](https://codecov.io/gh/Xarrow/simple-pyyuque/branch/master/graph/badge.svg)](https://codecov.io/gh/Xarrow/simple-pyyuque)
@@ -62,10 +62,39 @@ print("==> Helixcs is %s", user.get_users(login="Helixcs").base_response)
 ----
 # API 说明
 
-1. User 资源
+### 1. User 资源
 
+* 获取认证的用户的个人信息
 
-TODO
+```python
+ user_api = SimplePyYuQueAPI(token="token", app_name="py_yuque1").User()
+ print(user_api.get_user())
+ print(user_api.user)
+```
+
+* 获取单个用户信息
+
+```python
+
+user.get_users(login="Helixcs")
+
+user.get_users(id=104023)
+
+```
+
+* 获取我创建的文档
+
+```python
+user.get_user_docs()
+
+```
+
+* 获取我最近参与的文档/知识库
+
+```python
+user.get_user_recent_updated()
+
+```
 
 2. Group 资源
 
