@@ -134,8 +134,88 @@ group_api.public_groups
 * 创建 Group
 
 ```python
+
+group_api.post_group(name="Helixcs 的组织名称", login="Helixcs123",description="Helixcs 的组织描述")
+
 ```
 
+返回：UserSerializer
+
+访问：`https://www.yuque.com/<login>` 查看新建 Group。
+
+
+* 获取单个组织的详细信息
+
+```python
+group_api.get_groups_detail(id=225250)
+group_api.get_groups_detail(login="Helixcs123")
+
+# https://www.yuque.com/helixcs123
+
+```
+返回：UserSerializer
+
+* 更新单个组织的详细信息
+
+```python
+group_api.put_groups(login="Helixcs123",name="Helixcs 的组织名称更新1次",login_update="Helixcs456",description="Helixcs123 更新为Helixcs456")
+group_api.update_groups(login="Helixcs123",name="Helixcs 的组织名称更新2次",login_update="Helixcs123",description="Helixcs123 更新为Helixcs456")
+
+# https://www.yuque.com/helixcs123
+```
+
+返回：UserSerializer
+
+访问：`https://www.yuque.com/<login>`
+
+
+* 删除组织
+```python
+group_api.delete_groups(login="Helixcs456")
+group_api.delete_groups(id=225250)
+
+```
+
+返回：UserSerializer
+
+* 获取组织成员信息
+
+```python
+# 这里的 login 为 group name
+group_api.get_groups_users(login="Helixcs456")
+
+# 这里的 id 为 group_id
+group_api.get_groups_users(id=225250)
+
+```
+
+返回：Array<GroupUserSerializer>
+
+
+* 增加或更新组织成员
+
+```python
+group_api.put_groups_users(group_login="Helixcs456",
+                                         login="OtherUser",
+                                         role=1)
+
+group_api.update_group_users(group_login="Helixcs456",
+                                         login="OtherUser",
+                                         role=1)
+```
+
+返回：GroupUserSerializer
+
+* 删除组织成员
+```python
+group_api.delete_groups_users(group_login="Helixcs456",
+                              login="OtherUser")
+
+group_api.delete_groups_users(group_id=225250,
+                              login="OtherUser")
+```
+
+返回：GroupUserSerializer
 
 ### 3. Repo 资源
 

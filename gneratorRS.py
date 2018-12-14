@@ -24,12 +24,11 @@ from simple_pyyuque import SimplePyYuQueAPI,UserDescriptionType
 
 group = SimplePyYuQueAPI(token="LIpEyM947oR2ZjmEdgCd6ByKPQUlLd39UrrtXVlS", app_name="py_yuque1").Group()
 # User
-user_base = group.get_users_groups(login="Helixcs")
+user_base = group.get_groups_users(login="Helixcs456")
 
 ss = '''
 |属性|类型|示例|说明|
 |---|-----|----|----|
-
 '''
 
 for k, v in user_base.base_response[0].items():

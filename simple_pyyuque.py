@@ -206,7 +206,7 @@ class UserSerializer(BaseSerializer):
         return self.user_response.get('updated_at') if self.user_response is not None else None
 
     def __repr__(self):
-        return 'UserSerializer=(id={!r},type={!r},{!r})description={!r},acatar_url={!r},created_at={!r},upadate_at={' \
+        return 'UserSerializer=(id={!r},type={!r},{!r} ,description={!r},acatar_url={!r},created_at={!r},upadate_at={' \
                '!r},)'.format(self.id, self.type, self.name, self.description, self.avatar_url, self.created_at,
                               self.updated_at)
 

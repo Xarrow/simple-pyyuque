@@ -87,3 +87,22 @@
 |_serializer|string|v2.book||
 
 详细文档参考：[https://www.yuque.com/yuque/developer/bookserializer](https://www.yuque.com/yuque/developer/bookserializer)
+
+
+----
+## GroupUserSerializer
+
+|属性|类型|示例|说明|
+|---|-----|----|----|
+|id|int|300812||
+|group_id|int|225250||
+|user_id|int|104023||
+|user|dict|dict||
+|role|int|0||
+|status|int|1||
+|created_at|string|2018-12-14T10:04:00.000Z||
+|updated_at|string|2018-12-14T10:04:00.000Z||
+|group|None|None||
+|_serializer|string|v2.group_user||
+
+详细文档参考：[https://www.yuque.com/yuque/developer/groupuserserializer](https://www.yuque.com/yuque/developer/groupuserserializer)
