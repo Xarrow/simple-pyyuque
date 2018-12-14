@@ -15,6 +15,7 @@ from simple_pyyuque import SimplePyYuQueAPI
 lark_api = SimplePyYuQueAPI(token="LIpEyM947oR2ZjmEdgCd6ByKPQUlLd39UrrtXVlS", app_name="py_yuque1")
 user_api = lark_api.User()
 group_api = lark_api.Group()
+repo_api = lark_api.Repo()
 
 
 class TestPyYuQue(object):
@@ -86,6 +87,11 @@ class TestPyYuQue(object):
 
         print(res)
 
+    def test_get_users_repos(self):
+        res = repo_api.get_users_repos(type="all",login="Helixcs").base_response
+        print(res)
+
+
 
 if __name__ == '__main__':
     t = TestPyYuQue()
@@ -94,3 +100,4 @@ if __name__ == '__main__':
     # t.test_update_groups()
     # t.test_get_groups_users()
     # t.test_put_groups_users()
+    t.test_get_users_repos()

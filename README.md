@@ -219,6 +219,15 @@ group_api.delete_groups_users(group_id=225250,
 
 ### 3. Repo 资源
 
+* 获取某个用户/组织的仓库列表
+
+```python
+repo_api.get_users_repos(type="all",login="Helixcs")
+
+```
+
+返回：Array<BookSerializer>
+
 TODO
 
 ### 4. Doc 资源

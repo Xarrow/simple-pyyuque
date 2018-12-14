@@ -1272,8 +1272,9 @@ class SimplePyYuQueAPI(BaseAPI):
             :return:                     Optional[BookSerializerList]
             """
             if is_blank(login) and is_blank(id):
-                # TODO
-                pass
+                message = MESSAGE_TEMPLATE_A.format(method_name="get_users_repos", p1="login", p2="id",
+                                                    doc_uri="https://www.yuque.com/yuque/developer/repo")
+                raise YuQueAPIException(message)
             params = {"type": type.value if isinstance(type, RepoType) else type, "include_membered": include_membered,
                       "offset": offset}
             return self.yuque_api.get_request(

@@ -106,3 +106,28 @@
 |_serializer|string|v2.group_user||
 
 详细文档参考：[https://www.yuque.com/yuque/developer/groupuserserializer](https://www.yuque.com/yuque/developer/groupuserserializer)
+
+----
+## BookSerializer
+
+|属性|类型|示例|说明|
+|---|-----|----|----|
+|id|int|167245||
+|type|string|Book||
+|slug|string|tuyepi||
+|name|string|测试||
+|user_id|int|104023||
+|description|string|||
+|creator_id|int|104023||
+|public|int|0||
+|items_count|int|2||
+|likes_count|int|0||
+|watches_count|int|1||
+|content_updated_at|string|2018-12-09T11:33:16.023Z||
+|updated_at|string|2018-12-09T11:33:16.000Z||
+|created_at|string|2018-10-24T03:23:16.000Z||
+|namespace|string|helixcs/tuyepi||
+|user|dict|dict||
+|_serializer|string|v2.book||
+
+详细文档参考：[https://www.yuque.com/yuque/developer/bookserializer](https://www.yuque.com/yuque/developer/bookserializer)
