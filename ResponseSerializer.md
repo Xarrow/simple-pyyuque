@@ -127,7 +127,7 @@
 |updated_at|string|2018-12-09T11:33:16.000Z||
 |created_at|string|2018-10-24T03:23:16.000Z||
 |namespace|string|helixcs/tuyepi||
-|user|dict|dict||
+|user|`Userializer`|||
 |_serializer|string|v2.book||
 
 详细文档参考：[https://www.yuque.com/yuque/developer/bookserializer](https://www.yuque.com/yuque/developer/bookserializer)

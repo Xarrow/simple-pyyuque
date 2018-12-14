@@ -139,7 +139,7 @@ group_api.post_group(name="Helixcs 的组织名称", login="Helixcs123",descript
 
 ```
 
-返回：UserSerializer
+返回：`UserSerializer`
 
 访问：`https://www.yuque.com/<login>` 查看新建 Group。
 
@@ -153,7 +153,7 @@ group_api.get_groups_detail(login="Helixcs123")
 # https://www.yuque.com/helixcs123
 
 ```
-返回：UserSerializer
+返回：`UserSerializer`
 
 * 更新单个组织的详细信息
 
@@ -164,7 +164,7 @@ group_api.update_groups(login="Helixcs123",name="Helixcs 的组织名称更新2�
 # https://www.yuque.com/helixcs123
 ```
 
-返回：UserSerializer
+返回：`UserSerializer`
 
 访问：`https://www.yuque.com/<login>`
 
@@ -176,7 +176,7 @@ group_api.delete_groups(id=225250)
 
 ```
 
-返回：UserSerializer
+返回：`UserSerializer`
 
 * 获取组织成员信息
 
@@ -189,7 +189,7 @@ group_api.get_groups_users(id=225250)
 
 ```
 
-返回：Array<GroupUserSerializer>
+返回：`Array<GroupUserSerializer>`
 
 
 * 增加或更新组织成员
@@ -204,7 +204,7 @@ group_api.update_group_users(group_login="Helixcs456",
                                          role=1)
 ```
 
-返回：GroupUserSerializer
+返回：`GroupUserSerializer`
 
 * 删除组织成员
 ```python
@@ -215,7 +215,7 @@ group_api.delete_groups_users(group_id=225250,
                               login="OtherUser")
 ```
 
-返回：GroupUserSerializer
+返回：`GroupUserSerializer`
 
 ### 3. Repo 资源
 
@@ -226,7 +226,7 @@ repo_api.get_users_repos(type="all",login="Helixcs")
 
 ```
 
-返回：Array<BookSerializer>
+返回：`Array<BookSerializer>`
 
 TODO
 
