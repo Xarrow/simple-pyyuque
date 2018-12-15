@@ -58,6 +58,7 @@ if __name__ == '__main__':
     # # print(y.delete_repo(namespace="rn15gw/ig2r81"))
     # print(y.repos_toc(namespace="helixcs/tuyepi").base_response)
     # print(y.search_repos(q="doc").base_response)
+
     # # Docs
     # print(y.get_repos_docs(namespace="helixcs/tuyepi").base_response)
     # print(y.get_repos_docs_detail(namespace="helixcs/tuyepi", slug="taosm3").base_response)

@@ -228,9 +228,99 @@ repo_api.get_users_repos(type="all",login="Helixcs")
 
 返回：`Array<BookSerializer>`
 
-TODO
+* 创建新仓库
+
+```python
+res = repo_api.post_users_repos(name="Helixcs 的仓库123",
+                                slug="helixcs123",
+                                description="Helixcs 的仓库123",
+                                public=RepoPublic.ALL_OPEN,
+                                type=RepoType.BOOK,
+                                login="Helixcs",
+                                )
+res = repo_api.create_repos(name="Helixcs 的仓库123",
+                            slug="helixcs123",
+                            description="Helixcs 的仓库123",
+                            public=RepoPublic.ALL_OPEN,
+                            type=RepoType.BOOK,
+                            login="Helixcs",
+                            )
+
+```
+
+
+返回：`BookDetailSerializer`
+
+访问：`https://www.yuque.com/helixcs/helixcs123`
+
+* 获取仓库详情
+```python
+res = repo_api.get_repos_detail(namespace="helixcs/helixcs123")
+res = repo_api.get_repos(namespace="helixcs/helixcs123")
+res = repo_api.get_repos_detail(id=189411)
+res = repo_api.get_repos(id=189411)
+```
+返回：`BookDetailSerializer`
+
+* 更新仓库信息
+
+```python
+repo_api.put_repos(name="helixcs234 仓库",
+                                 slug="helixcs234",
+                                 toc="",
+                                 description="Helixcs 仓库234",
+                                 public=RepoPublic.PRIVATE,
+                                 namespace="helixcs/helixcs123").base_response
+
+repo_api.update_repos(name="helixcs234 仓库",
+                                 slug="helixcs234",
+                                 toc="",
+                                 description="Helixcs 仓库234",
+                                 public=RepoPublic.PRIVATE,
+                                 namespace="helixcs/helixcs123").base_response
+
+```
+
+返回：`BookDetailSerializer`
+
+访问：`https://www.yuque.com/helixcs/helixcs123` 跳转 `https://www.yuque.com/helixcs/helixcs234`
+
+
+* 删除仓库
+
+```python
+repo_api.delete_repo(namespace="helixcs/helixcs234")
+repo_api.delete_repo(id=189411)
+
+```
+
+返回：`BookDeleteSerializer`
+
+* 获取一个仓库的目录结构
+
+```python
+repo_api.repos_toc(namespace="helixcs/helixcs234")
+repo_api.repos_toc(id=189411)
+```
+
+
+返回：`RepoTocSerializerList`
+
+* 基于关键字搜索仓库
+
+```python
+repo_api.search_repos(q='a',type=RepoType.BOOK)
+```
+返回：`Array<BookSerializer>`
+
 
 ### 4. Doc 资源
+
+* 获取一个仓库的文档列表
+
+```python
+
+```
 
 TODO
 

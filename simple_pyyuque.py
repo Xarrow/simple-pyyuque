@@ -1301,8 +1301,9 @@ class SimplePyYuQueAPI(BaseAPI):
             :return:                     Optional[BookSerializerList]
             """
             if is_blank(login) and is_blank(id):
-                # TODO
-                pass
+                message = MESSAGE_TEMPLATE_A.format(method_name="get_group_repos", p1="login", p2="id",
+                                                    doc_uri="https://www.yuque.com/yuque/developer/repo")
+                raise YuQueAPIException(message)
             return self.get_users_repos(type=type, include_membered=include_membered, offset=offset, login=login, id=id)
 
         def post_users_repos(self, name: str,
@@ -1327,21 +1328,26 @@ class SimplePyYuQueAPI(BaseAPI):
             :return:                 Optional[BookSerializer]
             """
             if is_blank(login) and is_blank(id):
-                # TODO
-                pass
+                message = MESSAGE_TEMPLATE_A.format(method_name="post_users_repos", p1="login", p2="id",
+                                                    doc_uri="https://www.yuque.com/yuque/developer/repo")
+                raise YuQueAPIException(message)
 
             if is_blank(name):
-                pass
+                message = MESSAGE_TEMPLATE_B.format(method_name="post_users_repos", p1="name",
+                                                    doc_uri="https://www.yuque.com/yuque/developer/repo")
+                raise YuQueAPIException(message)
             if is_blank(slug):
-                pass
+                message = MESSAGE_TEMPLATE_B.format(method_name="post_users_repos", p1="slug",
+                                                    doc_uri="https://www.yuque.com/yuque/developer/repo")
+                raise YuQueAPIException(message)
 
             data = {"name": name, "slug": slug, "description": description, "public": public.value, "type": type.value}
             return self.yuque_api.post_request(
                 source_name="/groups/{}/repos".format(login if is_not_blank(login) else id),
                 res_type=BookSerializer, data=data)
-            pass
 
-        def post_groups_repos(self, name: str,
+        def post_groups_repos(self,
+                              name: str,
                               slug: str,
                               description: str = "",
                               public: Union[RepoPublic, int] = RepoPublic.PRIVATE,
@@ -1362,13 +1368,18 @@ class SimplePyYuQueAPI(BaseAPI):
             :return:                 Optional[BookSerializer]
             """
             if is_blank(login) and is_blank(id):
-                # TODO
-                pass
+                message = MESSAGE_TEMPLATE_A.format(method_name="post_groups_repos", p1="login", p2="id",
+                                                    doc_uri="https://www.yuque.com/yuque/developer/repo")
+                raise YuQueAPIException(message)
 
             if is_blank(name):
-                pass
+                message = MESSAGE_TEMPLATE_B.format(method_name="post_groups_repos", p1="name",
+                                                    doc_uri="https://www.yuque.com/yuque/developer/repo")
+                raise YuQueAPIException(message)
             if is_blank(slug):
-                pass
+                message = MESSAGE_TEMPLATE_B.format(method_name="post_groups_repos", p1="slug",
+                                                    doc_uri="https://www.yuque.com/yuque/developer/repo")
+                raise YuQueAPIException(message)
 
             return self.post_users_repos(name=name, slug=slug, description=description, public=public, type=type,
                                          login=login, id=id)
@@ -1389,8 +1400,10 @@ class SimplePyYuQueAPI(BaseAPI):
             :return:            Optional[BookDetailSerializer]
             """
             if is_blank(namespace) and is_blank(id):
-                # TODO
-                pass
+                message = MESSAGE_TEMPLATE_A.format(method_name="get_repos", p1="login", p2="id",
+                                                    doc_uri="https://www.yuque.com/yuque/developer/repo")
+                raise YuQueAPIException(message)
+
             params = {"type": type.value if isinstance(type, RepoType) else type}
             return self.yuque_api.get_request(
                 source_name="/repos/{}".format(namespace if is_not_blank(namespace) else id),
@@ -1398,10 +1411,10 @@ class SimplePyYuQueAPI(BaseAPI):
                 params=params)
 
         def put_repos(self,
-                      name: str,
-                      slug: str,
-                      toc: str,
-                      description: str = "",
+                      name: str = None,
+                      slug: str = None,
+                      toc: str = None,
+                      description: str = None,
                       public: Union[int, RepoPublic] = RepoPublic.PRIVATE,
                       namespace: str = None, id: int = None, ) -> Optional[BookDetailSerializer]:
 
@@ -1418,14 +1431,22 @@ class SimplePyYuQueAPI(BaseAPI):
             :return:                 Optional[BookDetailSerializer]
             """
             if is_blank(namespace) and is_blank(id):
-                pass
+                message = MESSAGE_TEMPLATE_A.format(method_name="put_repos", p1="login", p2="id",
+                                                    doc_uri="https://www.yuque.com/yuque/developer/repo")
+                raise YuQueAPIException(message)
 
-            if is_blank(name):
-                pass
-            if is_blank(slug):
-                pass
-            data = {"name": name, "slug": slug, "toc": toc, "description": description,
-                    "public": public.value if isinstance(public, RepoPublic) else public}
+            data = {}
+            if name is not None:
+                data["name"] = name
+            if slug is not None:
+                data['slug'] = slug
+            if toc is not None:
+                data['toc'] = toc
+
+            if description is not None:
+                data['description'] = description
+
+            data['public'] = public.value if isinstance(public, RepoPublic) else public
 
             return self.yuque_api.put_request(
                 source_name="/repos/{}".format(namespace if is_not_blank(namespace) else id),
@@ -1443,7 +1464,10 @@ class SimplePyYuQueAPI(BaseAPI):
             :return:
             """
             if is_blank(namespace) and is_blank(id):
-                pass
+                message = MESSAGE_TEMPLATE_A.format(method_name="delete_repo", p1="namespace", p2="id",
+                                                    doc_uri="https://www.yuque.com/yuque/developer/repo")
+                raise YuQueAPIException(message)
+
             return self.yuque_api.delete_request(
                 source_name="/repos/{}".format(namespace if is_not_blank(namespace) else id),
                 res_type=BookDeleteSerializer)
@@ -1460,7 +1484,10 @@ class SimplePyYuQueAPI(BaseAPI):
             :return:
             """
             if is_blank(namespace) and is_blank(id):
-                pass
+                message = MESSAGE_TEMPLATE_A.format(method_name="repos_toc", p1="namespace", p2="id",
+                                                    doc_uri="https://www.yuque.com/yuque/developer/repo")
+                raise YuQueAPIException(message)
+
             return self.yuque_api.get_request(
                 source_name="/repos/{}/toc".format(namespace if is_not_blank(namespace) else id),
                 res_type=RepoTocSerializerList)
@@ -1474,7 +1501,10 @@ class SimplePyYuQueAPI(BaseAPI):
             :return:        Optional[BookSerializerList]
             """
             if is_blank(q):
-                pass
+                message = MESSAGE_TEMPLATE_B.format(method_name="search_repos", p1="q",
+                                                    doc_uri="https://www.yuque.com/yuque/developer/repo")
+                raise YuQueAPIException(message)
+
             params = {"q": q, "type": type.value if isinstance(type, RepoType) else type}
             return self.yuque_api.get_request(source_name="/search/repos", res_type=BookSerializerList, params=params)
 

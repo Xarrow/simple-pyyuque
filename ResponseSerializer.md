@@ -131,3 +131,14 @@
 |_serializer|string|v2.book||
 
 详细文档参考：[https://www.yuque.com/yuque/developer/bookserializer](https://www.yuque.com/yuque/developer/bookserializer)
+
+
+## RepoTocSerializerList
+
+|属性|类型|示例|说明|
+|---|-----|----|----|
+|title|string|New Node1||
+|slug|string|#||
+|depth|int|1||
+
+详细文档参考：[https://www.yuque.com/yuque/developer/repo](https://www.yuque.com/yuque/developer/repo)

@@ -24,14 +24,14 @@ from simple_pyyuque import SimplePyYuQueAPI,UserDescriptionType
 
 repo = SimplePyYuQueAPI(token="LIpEyM947oR2ZjmEdgCd6ByKPQUlLd39UrrtXVlS", app_name="py_yuque1").Repo()
 # User
-user_base = repo.get_users_repos(type="all",login="Helixcs")
+user_base = repo.repos_toc(id=189411).base_response
 
 ss = '''
 |属性|类型|示例|说明|
 |---|-----|----|----|
 '''
 
-for k, v in user_base.base_response[0].items():
+for k, v in user_base[0].items():
     if isinstance(v, str):
         _res = "string"
     elif isinstance(v, int):

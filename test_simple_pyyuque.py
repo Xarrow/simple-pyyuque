@@ -10,7 +10,7 @@
  
  Add New Functional TestPyYuQue
 """
-from simple_pyyuque import SimplePyYuQueAPI
+from simple_pyyuque import *
 
 lark_api = SimplePyYuQueAPI(token="LIpEyM947oR2ZjmEdgCd6ByKPQUlLd39UrrtXVlS", app_name="py_yuque1")
 user_api = lark_api.User()
@@ -88,9 +88,74 @@ class TestPyYuQue(object):
         print(res)
 
     def test_get_users_repos(self):
-        res = repo_api.get_users_repos(type="all",login="Helixcs").base_response
+        res = repo_api.get_users_repos(type="all", login="Helixcs").base_response
         print(res)
 
+    def test_post_users_repos(self):
+        res = repo_api.post_users_repos(name="Helixcs 的仓库123",
+                                        slug="helixcs123",
+                                        description="Helixcs 的仓库123",
+                                        public=RepoPublic.ALL_OPEN,
+                                        type=RepoType.BOOK,
+                                        login="Helixcs",
+                                        )
+
+        res = repo_api.create_repos(name="Helixcs 的仓库123",
+                                    slug="helixcs123",
+                                    description="Helixcs 的仓库123",
+                                    public=RepoPublic.ALL_OPEN,
+                                    type=RepoType.BOOK,
+                                    login="Helixcs",
+                                    )
+
+        print(res)
+        # https://www.yuque.com/helixcs/helixcs123
+
+    def test_get_repos(self):
+        # res = repo_api.get_repos_detail(namespace="helixcs/helixcs123")
+        # res = repo_api.get_repos(namespace="helixcs/helixcs123")
+        # res = repo_api.get_repos_detail(id=189411)
+        res = repo_api.get_repos(id=189411)
+        print(res.base_response)
+
+    def test_put_repos(self):
+        toc = '''
+        - [New Node1]()
+        - [new Doc1-1](avm3rn "1056206")
+        - [new Doc2-1](xvmadh)
+        - [new Doc1-2](uhdxg5)
+        - [new Doc2](lb3i5k)
+        - [New Doc3](oi5u6l "1056203")
+'''
+        res = repo_api.put_repos(name="helixcs234 仓库",
+                                 slug="helixcs234",
+                                 toc="",
+                                 description="Helixcs 仓库234",
+                                 public=RepoPublic.PRIVATE,
+                                 namespace="helixcs/helixcs123").base_response
+
+        res = repo_api.update_repos(name="helixcs234 仓库",
+                                    slug="helixcs234",
+                                    toc="",
+                                    description="Helixcs 仓库234",
+                                    public=RepoPublic.PRIVATE,
+                                    namespace="helixcs/helixcs123").base_response
+
+        print(res)
+        # https://www.yuque.com/helixcs/helixcs234
+
+    def test_delete_repos(self):
+        res = repo_api.delete_repo(namespace="helixcs/helixcs234")
+        res = repo_api.delete_repo(id=189411)
+
+    def test_repos_toc(self):
+        res = repo_api.repos_toc(namespace="helixcs/helixcs234")
+        res = repo_api.repos_toc(id=189411).base_response
+        print(res)
+
+    def test_search_repos(self):
+        res = repo_api.search_repos(q='a',type=RepoType.BOOK).base_response
+        print(res)
 
 
 if __name__ == '__main__':
@@ -101,3 +166,8 @@ if __name__ == '__main__':
     # t.test_get_groups_users()
     # t.test_put_groups_users()
     t.test_get_users_repos()
+    # t.test_post_users_repos()
+    # t.test_get_repos()
+    # t.test_put_repos()
+    t.test_repos_toc()
+    t.test_search_repos()
