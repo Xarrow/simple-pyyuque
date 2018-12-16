@@ -12,7 +12,7 @@
 """
 from simple_pyyuque import *
 
-lark_api = SimplePyYuQueAPI(token="LIpEyM947oR2ZjmEdgCd6ByKPQUlLd39UrrtXVlS", app_name="py_yuque1")
+lark_api = SimplePyYuQueAPI(token="token", app_name="py_yuque1")
 user_api = lark_api.User()
 group_api = lark_api.Group()
 repo_api = lark_api.Repo()

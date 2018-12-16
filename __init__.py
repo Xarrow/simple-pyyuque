@@ -11,4 +11,4 @@
  Add New Functional __init__.py
 """
 
-from .simple_pyyuque import SimplePyYuQueAPI
+from .simple_pyyuque import *

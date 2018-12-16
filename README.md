@@ -60,7 +60,7 @@ print("==> Helixcs is %s", user.get_users(login="Helixcs").base_response)
 详细API参考官方文档：[https://www.yuque.com/yuque/developer/user](https://www.yuque.com/yuque/developer/user)
 
 ----
-# API 说明
+# API 说明与示例
 
 ### 1. User 用户
 
@@ -90,7 +90,9 @@ user.get_users(id=104023)
 * 获取我创建的文档
 
 ```python
+
 user.get_user_docs()
+
 user_api.get_user_docs(q='',offset=1)
 
 ```
@@ -100,8 +102,11 @@ user_api.get_user_docs(q='',offset=1)
 * 获取我最近参与的文档/知识库
 
 ```python
+
 user.get_user_recent_updated()
+
 user.get_user_recent_updated(type=UserDescriptionType.BOOK)
+
 user.get_user_recent_updated(type="Doc")
 
 ```
@@ -114,8 +119,10 @@ user.get_user_recent_updated(type="Doc")
 * 获取某个用户的加入的组织列表
 
 ```python
- group_api = SimplePyYuQueAPI(token="token", app_name="py_yuque1").User()
- group_api.get_users_groups(login="Helixcs")
+
+group_api = SimplePyYuQueAPI(token="token", app_name="py_yuque1").User()
+
+group_api.get_users_groups(login="Helixcs")
 
 ```
 
@@ -124,7 +131,9 @@ user.get_user_recent_updated(type="Doc")
 * 获取公开组织列表
 
 ```python
+
 group_api.get_public_groups()
+
 group_api.public_groups
 
 ```
@@ -147,7 +156,9 @@ group_api.post_group(name="Helixcs 的组织名称", login="Helixcs123",descript
 * 获取单个组织的详细信息
 
 ```python
+
 group_api.get_groups_detail(id=225250)
+
 group_api.get_groups_detail(login="Helixcs123")
 
 # https://www.yuque.com/helixcs123
@@ -158,10 +169,12 @@ group_api.get_groups_detail(login="Helixcs123")
 * 更新单个组织的详细信息
 
 ```python
+
 group_api.put_groups(login="Helixcs123",name="Helixcs 的组织名称更新1次",login_update="Helixcs456",description="Helixcs123 更新为Helixcs456")
+
 group_api.update_groups(login="Helixcs123",name="Helixcs 的组织名称更新2次",login_update="Helixcs123",description="Helixcs123 更新为Helixcs456")
 
-# https://www.yuque.com/helixcs123
+# 访问: https://www.yuque.com/helixcs123
 ```
 
 返回：`UserSerializer`
@@ -170,8 +183,11 @@ group_api.update_groups(login="Helixcs123",name="Helixcs 的组织名称更新2�
 
 
 * 删除组织
+
 ```python
+
 group_api.delete_groups(login="Helixcs456")
+
 group_api.delete_groups(id=225250)
 
 ```
@@ -181,6 +197,7 @@ group_api.delete_groups(id=225250)
 * 获取组织成员信息
 
 ```python
+
 # 这里的 login 为 group name
 group_api.get_groups_users(login="Helixcs456")
 
@@ -195,19 +212,19 @@ group_api.get_groups_users(id=225250)
 * 增加或更新组织成员
 
 ```python
-group_api.put_groups_users(group_login="Helixcs456",
-                                         login="OtherUser",
-                                         role=1)
 
-group_api.update_group_users(group_login="Helixcs456",
-                                         login="OtherUser",
-                                         role=1)
+group_api.put_groups_users(group_login="Helixcs456",login="OtherUser",role=1)
+
+group_api.update_group_users(group_login="Helixcs456",login="OtherUser",role=1)
+
 ```
 
 返回：`GroupUserSerializer`
 
 * 删除组织成员
+
 ```python
+
 group_api.delete_groups_users(group_login="Helixcs456",
                               login="OtherUser")
 
@@ -222,6 +239,7 @@ group_api.delete_groups_users(group_id=225250,
 * 获取某个用户/组织的仓库列表
 
 ```python
+
 repo_api.get_users_repos(type="all",login="Helixcs")
 
 ```
@@ -231,40 +249,45 @@ repo_api.get_users_repos(type="all",login="Helixcs")
 * 创建新仓库
 
 ```python
+
 res = repo_api.post_users_repos(name="Helixcs 的仓库123",
                                 slug="helixcs123",
                                 description="Helixcs 的仓库123",
                                 public=RepoPublic.ALL_OPEN,
                                 type=RepoType.BOOK,
-                                login="Helixcs",
-                                )
+                                login="Helixcs",)
+
 res = repo_api.create_repos(name="Helixcs 的仓库123",
                             slug="helixcs123",
                             description="Helixcs 的仓库123",
                             public=RepoPublic.ALL_OPEN,
                             type=RepoType.BOOK,
-                            login="Helixcs",
-                            )
+                            login="Helixcs",)
+
+# 访问：`https://www.yuque.com/helixcs/helixcs123`
 
 ```
 
-
 返回：`BookDetailSerializer`
 
-访问：`https://www.yuque.com/helixcs/helixcs123`
+访问：`https://www.yuque.com/helixcs/<slug>`
 
 * 获取仓库详情
+
 ```python
+
 res = repo_api.get_repos_detail(namespace="helixcs/helixcs123")
 res = repo_api.get_repos(namespace="helixcs/helixcs123")
 res = repo_api.get_repos_detail(id=189411)
 res = repo_api.get_repos(id=189411)
+
 ```
 返回：`BookDetailSerializer`
 
 * 更新仓库信息
 
 ```python
+
 repo_api.put_repos(name="helixcs234 仓库",
                                  slug="helixcs234",
                                  toc="",
@@ -279,16 +302,19 @@ repo_api.update_repos(name="helixcs234 仓库",
                                  public=RepoPublic.PRIVATE,
                                  namespace="helixcs/helixcs123").base_response
 
+# 访问：`https://www.yuque.com/helixcs/helixcs123` 跳转 `https://www.yuque.com/helixcs/helixcs234`
+
 ```
 
 返回：`BookDetailSerializer`
 
-访问：`https://www.yuque.com/helixcs/helixcs123` 跳转 `https://www.yuque.com/helixcs/helixcs234`
+访问：`https://www.yuque.com/<older namespace>` 跳转 `https://www.yuque.com/<new namespace>`
 
 
 * 删除仓库
 
 ```python
+
 repo_api.delete_repo(namespace="helixcs/helixcs234")
 repo_api.delete_repo(id=189411)
 
@@ -299,8 +325,10 @@ repo_api.delete_repo(id=189411)
 * 获取一个仓库的目录结构
 
 ```python
+
 repo_api.repos_toc(namespace="helixcs/helixcs234")
 repo_api.repos_toc(id=189411)
+
 ```
 
 
@@ -309,7 +337,9 @@ repo_api.repos_toc(id=189411)
 * 基于关键字搜索仓库
 
 ```python
+
 repo_api.search_repos(q='a',type=RepoType.BOOK)
+
 ```
 返回：`Array<BookSerializer>`
 
@@ -328,6 +358,7 @@ doc_api.get_repos_docs(id=189411).base_response
 * 获取单篇文档的详细信息
 
 ```python
+
 doc_api.get_repos_docs_detail(namespace="helixcs/tuyepi", slug="taosm3").base_response
 doc_api.get_docs_detail(namespace="helixcs/tuyepi", slug="taosm3").base_response
 
@@ -339,21 +370,24 @@ doc_api.get_docs_detail(namespace="helixcs/tuyepi", slug="taosm3").base_response
 
 ```python
 
-doc_api.post_repos_docs(namespace="helixcs/helixcs234", slug="randomstring", title="测试",
-                        body="你好世界!").base_response
+doc_api.post_repos_docs(namespace="helixcs/helixcs234", slug="randomstring", title="测试",body="你好世界!").base_response
 
-doc_api.create_docs(namespace="helixcs/helixcs234", slug="randomstring", title="测试",
-                    body="你好世界!").base_response
+doc_api.create_docs(namespace="helixcs/helixcs234", slug="randomstring", title="测试",body="你好世界!").base_response
+
+
+# 访问：https://www.yuque.com/helixcs/helixcs234/randomstring
+
 ```
 
 返回：`DocDetailSerializer`
 
-访问：`https://www.yuque.com/helixcs/helixcs234/randomstring`
+访问：`https://www.yuque.com/<namespace>/<slug>`
 
 
 * 更新文档
 
 ```python
+
 doc_api.put_repos_docs(namespace="helixcs/helixcs234", id=1057879, title="测试更新", slug="randomstring",
                        public=DocPublic.OPEN,
                        body="你好世界! (修改body)").base_response
@@ -369,11 +403,14 @@ doc_api.put_repos_docs(repo_id=189411, id=1057879, title="测试更新", slug="r
 doc_api.update_docs(repo_id=189411, id=1057879, title="测试更新", slug="randomstring",
                     public=DocPublic.OPEN,
                     body="你好世界! (修改body)").base_response
+
+访问：https://www.yuque.com/helixcs/helixcs234/randomstring
+
 ```
 
 返回：`DocDetailSerializer`
 
-访问：`https://www.yuque.com/helixcs/helixcs234/randomstring`
+访问：`https://www.yuque.com/<namespace>/<slug>`
 
 
 * 删除文档
