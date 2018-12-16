@@ -11,7 +11,22 @@
 
 ----
 # 安装
-TODO
+
+* pip 安装
+
+```python
+
+pip install simple-pyyuque
+
+```
+
+* pipenv 安装
+
+```python
+
+pipenv install simple-pyyuque
+
+```
 
 ----
 # 快速开始

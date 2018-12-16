@@ -773,7 +773,7 @@ class DocDetailSerializer(BaseSerializer):
         return self.base_response.get('_serializer') if self.base_response is not None else None
 
     def __repr__(self):
-        return "DocDetailSerializer=<{} .....>".format(self.id)
+        return "DocDetailSerializer=<id={} .....>".format(self.id)
 
 
 class GroupUserSerializer(BaseSerializer):
