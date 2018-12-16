@@ -319,10 +319,78 @@ repo_api.search_repos(q='a',type=RepoType.BOOK)
 * 获取一个仓库的文档列表
 
 ```python
+doc_api.get_repos_docs(namespace="helixcs/helixcs234").base_response
+doc_api.get_repos_docs(id=189411).base_response
+```
+
+返回：`Array<DocSerializer>`
+
+* 获取单篇文档的详细信息
+
+```python
+doc_api.get_repos_docs_detail(namespace="helixcs/tuyepi", slug="taosm3").base_response
+doc_api.get_docs_detail(namespace="helixcs/tuyepi", slug="taosm3").base_response
 
 ```
 
-TODO
+返回：`DocDetailSerializer`
+
+* 创建文档
+
+```python
+
+doc_api.post_repos_docs(namespace="helixcs/helixcs234", slug="randomstring", title="测试",
+                        body="你好世界!").base_response
+
+doc_api.create_docs(namespace="helixcs/helixcs234", slug="randomstring", title="测试",
+                    body="你好世界!").base_response
+```
+
+返回：`DocDetailSerializer`
+
+访问：`https://www.yuque.com/helixcs/helixcs234/randomstring`
+
+
+* 更新文档
+
+```python
+doc_api.put_repos_docs(namespace="helixcs/helixcs234", id=1057879, title="测试更新", slug="randomstring",
+                       public=DocPublic.OPEN,
+                       body="你好世界! (修改body)").base_response
+
+doc_api.update_docs(namespace="helixcs/helixcs234", id=1057879, title="测试更新", slug="randomstring",
+                    public=DocPublic.OPEN,
+                    body="你好世界! (修改body)").base_response
+
+doc_api.put_repos_docs(repo_id=189411, id=1057879, title="测试更新", slug="randomstring",
+                       public=DocPublic.OPEN,
+                       body="你好世界! (修改body)").base_response
+
+doc_api.update_docs(repo_id=189411, id=1057879, title="测试更新", slug="randomstring",
+                    public=DocPublic.OPEN,
+                    body="你好世界! (修改body)").base_response
+```
+
+返回：`DocDetailSerializer`
+
+访问：`https://www.yuque.com/helixcs/helixcs234/randomstring`
+
+
+* 删除文档
+
+```python
+
+doc_api.delete_repos_docs(namespace="helixcs/helixcs234", id=1057879).base_response
+doc_api.delete_repos_docs(repo_id=189411, id=1057879).base_response
+
+
+doc_api.delete_docs(namespace="helixcs/helixcs234", id=1057879).base_response
+doc_api.delete_docs(repo_id=189411, id=1057879).base_response
+
+```
+
+返回：`DocDetailSerializer`
+
 
 ----
 # 问题排查

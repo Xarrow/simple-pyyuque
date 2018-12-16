@@ -16,6 +16,7 @@ lark_api = SimplePyYuQueAPI(token="LIpEyM947oR2ZjmEdgCd6ByKPQUlLd39UrrtXVlS", ap
 user_api = lark_api.User()
 group_api = lark_api.Group()
 repo_api = lark_api.Repo()
+doc_api = lark_api.Doc()
 
 
 class TestPyYuQue(object):
@@ -154,7 +155,52 @@ class TestPyYuQue(object):
         print(res)
 
     def test_search_repos(self):
-        res = repo_api.search_repos(q='a',type=RepoType.BOOK).base_response
+        res = repo_api.search_repos(q='a', type=RepoType.BOOK).base_response
+        print(res)
+
+    def test_get_repos_docs(self):
+        res = doc_api.get_repos_docs(namespace="helixcs/helixcs234").base_response
+        res = doc_api.get_repos_docs(id=189411).base_response
+        print(res)
+
+    def test_get_repos_docs_detail(self):
+        res = doc_api.get_repos_docs_detail(namespace="helixcs/tuyepi", slug="taosm3").base_response
+        res = doc_api.get_docs_detail(namespace="helixcs/tuyepi", slug="taosm3").base_response
+        print(res)
+
+    def test_create_docs(self):
+        res = doc_api.post_repos_docs(namespace="helixcs/helixcs234", slug="randomstring", title="测试",
+                                      body="你好世界!").base_response
+        res = doc_api.create_docs(namespace="helixcs/helixcs234", slug="randomstring", title="测试",
+                                  body="你好世界!").base_response
+
+        # https://www.yuque.com/helixcs/helixcs234/randomstring
+
+    def test_update_docs(self):
+        res = doc_api.put_repos_docs(namespace="helixcs/helixcs234", id=1057879, title="测试更新", slug="randomstring",
+                                     public=DocPublic.OPEN,
+                                     body="你好世界! (修改body)").base_response
+        res = doc_api.update_docs(namespace="helixcs/helixcs234", id=1057879, title="测试更新", slug="randomstring",
+                                  public=DocPublic.OPEN,
+                                  body="你好世界! (修改body)").base_response
+
+        res = doc_api.put_repos_docs(repo_id=189411, id=1057879, title="测试更新", slug="randomstring",
+                                     public=DocPublic.OPEN,
+                                     body="你好世界! (修改body)").base_response
+
+        res = doc_api.update_docs(repo_id=189411, id=1057879, title="测试更新", slug="randomstring",
+                                  public=DocPublic.OPEN,
+                                  body="你好世界! (修改body)").base_response
+        print(res)
+        # https://www.yuque.com/helixcs/helixcs234/randomstring
+
+    def test_delete_docs(self):
+        res = doc_api.delete_repos_docs(namespace="helixcs/helixcs234", id=1057879).base_response
+        res = doc_api.delete_repos_docs(repo_id=189411, id=1057879).base_response
+
+        res = doc_api.delete_docs(namespace="helixcs/helixcs234", id=1057879).base_response
+        res = doc_api.delete_docs(repo_id=189411, id=1057879).base_response
+
         print(res)
 
 
@@ -171,3 +217,7 @@ if __name__ == '__main__':
     # t.test_put_repos()
     t.test_repos_toc()
     t.test_search_repos()
+    t.test_get_repos_docs()
+    t.test_get_repos_docs_detail()
+    # t.test_create_docs()
+    t.test_update_docs()

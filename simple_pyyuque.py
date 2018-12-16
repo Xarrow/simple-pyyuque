@@ -1553,9 +1553,6 @@ class SimplePyYuQueAPI(BaseAPI):
                 source_name="/repos/{}/docs".format(namespace if is_not_blank(namespace) else id),
                 res_type=DocSerializerList)
 
-        def get_docs(self, **kwargs) -> Optional[DocSerializerList]:
-            return self.get_repos_docs(**kwargs)
-
         def get_repos_docs_detail(self, namespace: str = None, slug: str = None, repo_id: str = None, id: int = None,
                                   raw: Union[int, DocRaw] = DocRaw.MARKDOWN) -> Optional[DocDetailSerializer]:
             """
@@ -1636,7 +1633,7 @@ class SimplePyYuQueAPI(BaseAPI):
             return self.post_repos_docs(**kwargs)
 
         def put_repos_docs(self, namespace: str = None,
-                           repo_id: str = None,
+                           repo_id: int = None,
                            id: int = None,
                            title: str = None,
                            slug: str = None,
@@ -1678,8 +1675,9 @@ class SimplePyYuQueAPI(BaseAPI):
         def update_docs(self, **kwargs) -> Optional[DocDetailSerializer]:
             return self.put_repos_docs(**kwargs)
 
-        def delete_repos_docs(self, namespace: str = None,
-                              repo_id: str = None,
+        def delete_repos_docs(self,
+                              namespace: str = None,
+                              repo_id: int = None,
                               id: int = None) -> Optional[DocDetailSerializer]:
             """
             删除文档
