@@ -205,19 +205,22 @@ class TestPyYuQue(object):
 
 
 if __name__ == '__main__':
-    t = TestPyYuQue()
-    # t.test_get_groups()
-    # t.test_get_groups_detail()
-    # t.test_update_groups()
-    # t.test_get_groups_users()
-    # t.test_put_groups_users()
-    t.test_get_users_repos()
-    # t.test_post_users_repos()
-    # t.test_get_repos()
-    # t.test_put_repos()
-    t.test_repos_toc()
-    t.test_search_repos()
-    t.test_get_repos_docs()
-    t.test_get_repos_docs_detail()
-    # t.test_create_docs()
-    t.test_update_docs()
+    try:
+        t = TestPyYuQue()
+        # t.test_get_groups()
+        # t.test_get_groups_detail()
+        # t.test_update_groups()
+        # t.test_get_groups_users()
+        # t.test_put_groups_users()
+        t.test_get_users_repos()
+        # t.test_post_users_repos()
+        # t.test_get_repos()
+        # t.test_put_repos()
+        t.test_repos_toc()
+        t.test_search_repos()
+        t.test_get_repos_docs()
+        t.test_get_repos_docs_detail()
+        # t.test_create_docs()
+        t.test_update_docs()
+    except Exception as ex:
+        pass

@@ -2,6 +2,8 @@
 
 # Simple PyYuQue
 
+[![PyPI](https://img.shields.io/pypi/v/simple-pyyuque.svg)](https://pypi.org/project/simple-pyyuque/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/simple-pyyuque.svg)](https://docs.python.org/3/whatsnew/3.6.html)
 [![Build Status](https://travis-ci.org/Xarrow/simple-pyyuque.svg?branch=master)](https://travis-ci.org/Xarrow/simple-pyyuque)
 [![codecov](https://codecov.io/gh/Xarrow/simple-pyyuque/branch/master/graph/badge.svg)](https://codecov.io/gh/Xarrow/simple-pyyuque)
 
