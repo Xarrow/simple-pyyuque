@@ -12,6 +12,7 @@
 """
 
 import logging
+import random
 import sys
 import asyncio
 import requests
@@ -56,6 +57,19 @@ def is_blank(value: Optional[Union[int, str, dict, list]]) -> bool:
 
 def is_not_blank(value: Optional[Union[int, str, dict, list]]) -> bool:
     return not is_blank(value=value)
+
+
+def generate_random_string_with_digest(length: int = 6) -> str:
+    _seed = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    _sa = []
+    for i in range(length):
+        _sa.append(random.choice(_seed))
+    _rds = "".join(_sa)
+    return _rds
+
+
+def generate_slug() -> str:
+    return generate_random_string_with_digest()
 
 
 STATUS_CODE_MAPPING = {

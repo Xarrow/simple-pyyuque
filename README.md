@@ -137,7 +137,7 @@ user.get_user_recent_updated(type="Doc")
 
 ```python
 
-group_api = SimplePyYuQueAPI(token="token", app_name="py_yuque1").User()
+group_api = SimplePyYuQueAPI(token="token", app_name="py_yuque1").Group()
 
 group_api.get_users_groups(login="Helixcs")
 
@@ -257,6 +257,8 @@ group_api.delete_groups_users(group_id=225250,
 
 ```python
 
+repo_api = SimplePyYuQueAPI(token="token", app_name="py_yuque1").Repo()
+
 repo_api.get_users_repos(type="all",login="Helixcs")
 
 ```
@@ -366,8 +368,12 @@ repo_api.search_repos(q='a',type=RepoType.BOOK)
 * 获取一个仓库的文档列表
 
 ```python
+
+doc_api = SimplePyYuQueAPI(token="token", app_name="py_yuque1").Doc()
+
 doc_api.get_repos_docs(namespace="helixcs/helixcs234").base_response
 doc_api.get_repos_docs(id=189411).base_response
+
 ```
 
 返回：`Array<DocSerializer>`
