@@ -57,7 +57,7 @@ class UploadCommand(Command):
 
 
 setup(
-    version="0.1",
+    version="0.1.1",
     long_description=long_description,
     long_description_content_type="text/markdown",
     name="simple_pyyuque",
