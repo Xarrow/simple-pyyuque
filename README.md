@@ -1,4 +1,4 @@
-<img src="pyyuque.png" height="100px" height="50px" /> 
+<img src="docs/pyyuque.png" height="100px" height="50px" /> 
 
 # Simple PyYuQue
 

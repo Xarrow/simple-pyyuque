@@ -10,5 +10,12 @@
  
  Add New Functional __init__.py
 """
+import sys
+
+try:
+    assert sys.version_info.major >= 3
+except Exception as ex:
+    raise AssertionError("simple-pyyuque only support 3+ !")
 
 from .simple_pyyuque import *
+from .simple_pyyuque_typing import *
