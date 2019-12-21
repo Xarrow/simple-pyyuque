@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list id="8a967593-1eb6-4909-a5ea-c8d2add828a0" name="Default2" comment="" />
     <list default="true" id="e3a16365-00f9-4733-97c6-c939cd129808" name="Default" comment="update readme">
-      <change beforePath="$PROJECT_DIR$/simple_pyyuque.py" afterPath="$PROJECT_DIR$/simple_pyyuque.py" />
-      <change beforePath="$PROJECT_DIR$/simple_pyyuque_typing.py" afterPath="$PROJECT_DIR$/simple_pyyuque_typing.py" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,11 +16,11 @@
     <splitter split-orientation="horizontal" split-proportion="0.54704016">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-          <file leaf-file-name="simple_pyyuque.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="simple_pyyuque.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/simple_pyyuque.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="579">
-                  <caret line="895" column="21" lean-forward="true" selection-start-line="895" selection-start-column="21" selection-end-line="895" selection-end-column="21" />
+                <state relative-caret-position="351">
+                  <caret line="902" column="46" lean-forward="false" selection-start-line="902" selection-start-column="46" selection-end-line="902" selection-end-column="46" />
                   <folding>
                     <element signature="e#194#208#0" expanded="true" />
                   </folding>
@@ -29,10 +28,20 @@
               </provider>
             </entry>
           </file>
+          <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/.gitignore">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="403">
+                  <caret line="105" column="6" lean-forward="false" selection-start-line="105" selection-start-column="6" selection-end-line="105" selection-end-column="6" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
           <file leaf-file-name="simple_pyyuque_typing.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/simple_pyyuque_typing.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-19">
+                <state relative-caret-position="3677">
                   <caret line="912" column="3" lean-forward="false" selection-start-line="912" selection-start-column="3" selection-end-line="912" selection-end-column="3" />
                   <folding>
                     <element signature="e#152#192#0" expanded="true" />
@@ -166,6 +175,7 @@
         <option value="$PROJECT_DIR$/simple_pyyuque_typing.py" />
         <option value="$PROJECT_DIR$/simple_pyyuque.py" />
         <option value="$PROJECT_DIR$/simple_pyyuque.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -736,10 +746,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1064" extended-state="6" />
-    <editor active="true" />
+    <frame x="-9" y="-9" width="1698" height="1034" extended-state="6" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2114165" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21125908" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32960895" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -747,7 +756,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32290503" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32960895" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21088795" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3530726" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35260117" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40670392" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1030,13 +1039,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1495">
-          <caret line="17" column="6" lean-forward="true" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tox.ini" />
     <entry file="file://$PROJECT_DIR$/LICENSE">
       <provider selected="true" editor-type-id="text-editor">
@@ -1193,7 +1195,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/simple_pyyuque_typing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-19">
+        <state relative-caret-position="3677">
           <caret line="912" column="3" lean-forward="false" selection-start-line="912" selection-start-column="3" selection-end-line="912" selection-end-column="3" />
           <folding>
             <element signature="e#152#192#0" expanded="true" />
@@ -1216,11 +1218,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/simple_pyyuque.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="579">
-          <caret line="895" column="21" lean-forward="true" selection-start-line="895" selection-start-column="21" selection-end-line="895" selection-end-column="21" />
+        <state relative-caret-position="351">
+          <caret line="902" column="46" lean-forward="false" selection-start-line="902" selection-start-column="46" selection-end-line="902" selection-end-column="46" />
           <folding>
             <element signature="e#194#208#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="403">
+          <caret line="105" column="6" lean-forward="false" selection-start-line="105" selection-start-column="6" selection-end-line="105" selection-end-column="6" />
+          <folding />
         </state>
       </provider>
     </entry>
