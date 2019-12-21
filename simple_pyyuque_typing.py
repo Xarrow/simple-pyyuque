@@ -75,10 +75,11 @@ class DocRaw(Enum):
 
 
 class BaseSerializer(object):
-    __slots__ = ['_base_response']
+    __slots__ = ['_base_response', '_web_link']
 
     def __init__(self, base_response: dict):
         self._base_response = base_response
+        self._web_link = ""
 
     @property
     def base_response(self) -> Optional[dict]:
@@ -106,6 +107,14 @@ class BaseSerializer(object):
     @property
     def destroy(self) -> Optional[bool]:
         return None if self.abilities is None else self.abilities.get("destroy")
+
+    @property
+    def web_link(self):
+        return self._web_link
+
+    @web_link.setter
+    def web_link(self, web_link):
+        self._web_link = web_link
 
 
 class UserSerializer(BaseSerializer):
@@ -252,6 +261,7 @@ class BookSerializer(BaseSerializer):
     def user_login(self) -> Optional[int]:
         return self.base_response.get("user.login") if self.base_response is not None else None
 
+    # TODO
     def __repr__(self):
         return "BookSerializer=(id={!r} ......)".format(self.id)
 
@@ -827,58 +837,109 @@ class GroupUserSerializerList(BaseSerializer):
                 self.base_response] if self.base_response is not None else None
 
 
-# 入参
-
-class BaseEntity(object):
-    pass
-
-
-class GroupPostEntity(BaseEntity):
-    def __init__(self, name: str, login: str, description: str):
-        self._name = name
-        self._login = login
-        self._description = description
+# Quick
+class QuickDocStructure(object):
+    def __init__(self, doc_serializer: DocSerializer = None, doc_detail_serializer: DocDetailSerializer = None):
+        self._doc_serializer = doc_serializer
+        self._doc_detail_serializer = doc_detail_serializer
 
     @property
-    def name(self):
-        return self._name
+    def doc_detail_serializer(self):
+        return self._doc_detail_serializer
 
-    def set_name(self, name):
-        self._name = name
-        return self
-
-    @property
-    def login(self):
-        return self._login
-
-    def set_login(self, login):
-        self._login = login
-        return self
+    @doc_detail_serializer.setter
+    def doc_detail_serializer(self, doc_detail_serializer):
+        self._doc_detail_serializer = doc_detail_serializer
 
     @property
-    def description(self):
-        return self._description
+    def doc_serializer(self):
+        return self._doc_serializer
 
-    def set_description(self, description):
-        self._description = description
-        return self
+    @doc_serializer.setter
+    def doc_serializer(self, doc_serializer):
+        self._doc_serializer = doc_serializer
 
 
-class PostRepoEntity(object):
+class QuickRepoStructure(object):
+    def __init__(self, quick_doc_structure_list: List[QuickDocStructure] = None,
+                 book_serializer: BookSerializer = None,
+                 book_detail_serializer: BookDetailSerializer = None
+                 ):
+        self._quick_doc_structure_list = quick_doc_structure_list or []
+        self._book_serializer = book_serializer
+        self._book_detail_serializer = book_detail_serializer
+
+    @property
+    def quick_doc_structure_list(self):
+        return self._quick_doc_structure_list
+
+    @quick_doc_structure_list.setter
+    def quick_doc_structure_list(self, quick_doc_structure_list):
+        self._quick_doc_structure_list = quick_doc_structure_list
+
+    def add_quick_doc_structure(self, quick_doc_structure):
+        self._quick_doc_structure_list.append(quick_doc_structure)
+
+    @property
+    def book_detail_serializer(self):
+        return self._book_detail_serializer
+
+    @book_detail_serializer.setter
+    def book_detail_serializer(self, book_detail_serializer):
+        self._book_detail_serializer = book_detail_serializer
+
+    @property
+    def book_serializer(self):
+        return self._book_serializer
+
+    @book_serializer.setter
+    def book_serializer(self, book_serializer):
+        self._book_serializer = book_serializer
+
+
+class QuickGroupStructure(object):
     def __init__(self,
-                 name: str = None,
-                 slug: str = None,
-                 toc: str = None,
-                 description: str = None,
-                 public: Union[int, RepoPublic] = RepoPublic.PRIVATE,
-                 namespace: str = None, id: int = None, ):
-        self._name = name
-        self._slug = slug
-        self._toc = toc
-        self._description = description
-        self._public = public
-        self._namespace = namespace
+                 quick_repo_structure_list: QuickRepoStructure = None,
+                 group_user_serializer: GroupUserSerializer = None):
+        self._quick_repo_structure_list = quick_repo_structure_list or []
+        self._group_user_serializer = group_user_serializer
 
     @property
-    def name(self):
-        return self._name
+    def group_user_serializer(self):
+        return self._group_user_serializer
+
+    @group_user_serializer.setter
+    def group_user_serializer(self, group_user_serializer):
+        self._group_user_serializer = group_user_serializer
+
+    @property
+    def quick_repo_structure_list(self):
+        return self._quick_repo_structure_list
+
+    @quick_repo_structure_list.setter
+    def quick_repo_structure_list(self, quick_repo_structure_list):
+        self._quick_repo_structure_list = quick_repo_structure_list
+
+
+class QuickUserStructure(object):
+    def __init__(self,
+                 quick_group_structure_list: List[QuickGroupStructure] = None,
+                 user_serializer: UserSerializer = None):
+        self._quick_group_structure_list = quick_group_structure_list or []
+        self._user_serializer = user_serializer
+
+    @property
+    def quick_group_structure_list(self):
+        return self._quick_group_structure_list
+
+    @quick_group_structure_list.setter
+    def quick_group_structure_list(self, quick_group_structure_list):
+        self._quick_group_structure_list = quick_group_structure_list
+
+    @property
+    def user_serializer(self):
+        return self._user_serializer
+
+    @user_serializer.setter
+    def user_serializer(self, user_serializer):
+        self._user_serializer = user_serializer

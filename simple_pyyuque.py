@@ -16,6 +16,7 @@ import requests
 from simple_pyyuque_typing import *
 from simple_pyyuque_utils import *
 
+YUQUE_MAIN_URL = "https://www.yuque.com/"
 BASIC_URL = 'https://www.yuque.com/api/v2/'
 MESSAGE_TEMPLATE_A = """# {method_name} , `{p1}` and `{p2}` can not both be blank ! For further API detail please 
 visit `{doc_uri}` """
@@ -23,6 +24,11 @@ MESSAGE_TEMPLATE_B = """# {method_name} , `{p1}` is not blank ! For further API 
 
 
 class YuQueAPIException(Exception):
+    def __init__(self, message) -> None:
+        self.message = message
+
+
+class YuQueAPIUnauthorized(Exception):
     def __init__(self, message) -> None:
         self.message = message
 
@@ -65,6 +71,14 @@ class BaseAPI(object):
         sc = res.status_code
         if sc != 200:
             message = "#_api_request , request failed , request kwargs=%s , messages=%s - %s  , result=%s  ,response headers=%s" % (
+                kwargs, sc, STATUS_CODE_MAPPING.get(sc), res.text, res.headers)
+            logger.error(message)
+            raise YuQueAPIException(message)
+        # 探测正确返回
+        try:
+            res.json()
+        except Exception as ex:
+            message = "#_api_request , response is not json type , request kwargs=%s , messages=%s - %s  , result=%s  ,response headers=%s" % (
                 kwargs, sc, STATUS_CODE_MAPPING.get(sc), res.text, res.headers)
             logger.error(message)
             raise YuQueAPIException(message)
@@ -124,7 +138,6 @@ class SimplePyYuQueAPI(BaseAPI):
     # User - 用户
     # @See https://www.yuque.com/yuque/developer/user
     class User(BaseRelation):
-
         def get_user(self) -> Optional[UserSerializer]:
             """
             获取认证的用户的个人信息,获取当前 Token 对应的用户的个人信息。
@@ -226,7 +239,7 @@ class SimplePyYuQueAPI(BaseAPI):
             """
             创建 Group
             :param name:            组织名称
-            :param login:           login
+            :param login:           login 访问后缀
             :param description:     描述
             :return:
             """
@@ -255,7 +268,7 @@ class SimplePyYuQueAPI(BaseAPI):
             GET /groups/:id
             :param id:
             :param login:
-            :return:
+            :return: Optional[UserSerializer]
             """
             if is_blank(id) and is_blank(login):
                 message = MESSAGE_TEMPLATE_A.format(method_name="get_groups", p1="id", p2="login",
@@ -396,12 +409,9 @@ class SimplePyYuQueAPI(BaseAPI):
                                                            login),
                 res_type=GroupUserSerializer)
 
-    # Repo - 仓库
+    # Repo - 知识库
     # @See https://www.yuque.com/yuque/developer/repo
     class Repo(BaseRelation):
-
-        # Repo - 仓库
-        # @See https://www.yuque.com/yuque/developer/rep
         def get_users_repos(self,
                             type: Union[RepoType, str] = RepoType.ALL,
                             include_membered: bool = False,
@@ -409,15 +419,17 @@ class SimplePyYuQueAPI(BaseAPI):
                             login: str = None,
                             id: int = None) -> Optional[BookSerializerList]:
             """
-            获取某个用户的仓库列表
+            获取某个用户知识库列表
+            # for User
             GET /users/:login/repos
             GET /users/:id/repos
+
             :param type:                Book, Design, all - 所有类型
-            :param include_membered:    true 包含用户参加的仓库，false 只返回用户创建的
+            :param include_membered:    true 包含用户参加的知识库，false 只返回用户创建的
             :param offset:              用于分页，效果类似 MySQL 的 limit offset，一页 20 条
-            :param login:
-            :param id:
-            :return:                     Optional[BookSerializerList]
+            :param login:               username , 用户名称
+            :param id:                  userid   , 用户Id
+            :return:                    Optional[BookSerializerList]
             """
             if is_blank(login) and is_blank(id):
                 message = MESSAGE_TEMPLATE_A.format(method_name="get_users_repos", p1="login", p2="id",
@@ -437,16 +449,16 @@ class SimplePyYuQueAPI(BaseAPI):
                             login: str = None,
                             id: int = None) -> Optional[BookSerializerList]:
             """
-            获取某个组织的仓库列表
+            获取某个团队的知识库列表
             GET /groups/:login/repos
             GET /groups/:id/repos
 
             :param type:                Book, Design, all - 所有类型
-            :param include_membered:    true 包含用户参加的仓库，false 只返回用户创建的
+            :param include_membered:    true 包含用户参加的知识库，false 只返回用户创建的
             :param offset:              用于分页，效果类似 MySQL 的 limit offset，一页 20 条
-            :param login:
-            :param id:
-            :return:                     Optional[BookSerializerList]
+            :param login:               团队名称
+            :param id:                  段对Id
+            :return:                    Optional[BookSerializerList]
             """
             if is_blank(login) and is_blank(id):
                 message = MESSAGE_TEMPLATE_A.format(method_name="get_group_repos", p1="login", p2="id",
@@ -459,21 +471,22 @@ class SimplePyYuQueAPI(BaseAPI):
                              description: str = "",
                              public: Union[RepoPublic, int] = RepoPublic.PRIVATE,
                              type: Union[RepoType, str] = RepoType.BOOK,
-                             login: str = None, id: int = None) -> Optional[BookSerializer]:
+                             login: str = None,
+                             id: int = None) -> Optional[BookSerializer]:
             """
-            创建新仓库
-            往自己下面创建仓库
+            创建知识库
+            往自己下面创建知识库
             POST /users/:login/repos
             POST /users/:id/repos
 
-            :param name:            仓库名称
+            :param name:            知识库名称
             :param slug:            slug
             :param description:     说明
             :param public:          0 私密, 1 内网公开, 2 全网公开
             :param type:            ‘Book’ 文库, ‘Design’ 画板, 请注意大小写
-            :param login:
-            :param id:
-            :return:                 Optional[BookSerializer]
+            :param login:           用户名称
+            :param id:              用户Id
+            :return:                Optional[BookSerializer]
             """
             if is_blank(login) and is_blank(id):
                 message = MESSAGE_TEMPLATE_A.format(method_name="post_users_repos", p1="login", p2="id",
@@ -490,9 +503,10 @@ class SimplePyYuQueAPI(BaseAPI):
                 raise YuQueAPIException(message)
 
             data = {"name": name, "slug": slug, "description": description, "public": public.value, "type": type.value}
-            return self.yuque_api.post_request(
+            book_serializer = self.yuque_api.post_request(
                 source_name="/groups/{}/repos".format(login if is_not_blank(login) else id),
                 res_type=BookSerializer, data=data)
+            return book_serializer
 
         def post_groups_repos(self,
                               name: str,
@@ -500,20 +514,21 @@ class SimplePyYuQueAPI(BaseAPI):
                               description: str = "",
                               public: Union[RepoPublic, int] = RepoPublic.PRIVATE,
                               type: Union[RepoType, str] = RepoType.BOOK,
-                              login: str = None, id: int = None) -> Optional[BookSerializer]:
+                              login: str = None,
+                              id: int = None) -> Optional[BookSerializer]:
             """
-            创建新仓库
-            往组织创建仓库
+            创建新知识库
+            往团队创建知识库
             POST /groups/:login/repos
             POST /groups/:id/repos
-            :param name:            仓库名称
+            :param name:            知识库名称
             :param slug:            slug
             :param description:     说明
             :param public:          0 私密, 1 内网公开, 2 全网公开
             :param type:            ‘Book’ 文库, ‘Design’ 画板, 请注意大小写
-            :param login:
-            :param id:
-            :return:                 Optional[BookSerializer]
+            :param login:           团队名称
+            :param id:              团队Id
+            :return:                Optional[BookSerializer]
             """
             if is_blank(login) and is_blank(id):
                 message = MESSAGE_TEMPLATE_A.format(method_name="post_groups_repos", p1="login", p2="id",
@@ -529,22 +544,30 @@ class SimplePyYuQueAPI(BaseAPI):
                                                     doc_uri="https://www.yuque.com/yuque/developer/repo")
                 raise YuQueAPIException(message)
 
-            return self.post_users_repos(name=name, slug=slug, description=description, public=public, type=type,
-                                         login=login, id=id)
+            book_serializer = self.post_users_repos(name=name, slug=slug, description=description, public=public,
+                                                    type=type,
+                                                    login=login,
+                                                    id=id)
+            if book_serializer is None:
+                return book_serializer
+
+            if is_not_blank(login):
+                book_serializer.web_link = "{0}/{1}/{2}".format(YUQUE_MAIN_URL, login, book_serializer.slug)
+
+            return book_serializer
 
         def get_repos(self,
                       namespace: str = None,
                       id: int = None,
-                      type: Union[str, RepoType] = RepoType.BOOK) -> \
-                Optional[BookDetailSerializer]:
+                      type: Union[str, RepoType] = RepoType.BOOK) -> Optional[BookDetailSerializer]:
             """
-            获取仓库详情
+            获取知识库详情
             GET /repos/:namespace
             # 或
             GET /repos/:id
             :param namespace:
             :param id:
-            :param type:        仓库类型，Book - 文库，Design - 设计稿
+            :param type:        知识库类型，Book - 文库，Design - 设计稿
             :return:            Optional[BookDetailSerializer]
             """
             if is_blank(namespace) and is_blank(id):
@@ -567,16 +590,16 @@ class SimplePyYuQueAPI(BaseAPI):
                       namespace: str = None, id: int = None, ) -> Optional[BookDetailSerializer]:
 
             """
-            更新仓库信息
+            更新知识库信息
 
-            :param name:            仓库名称
+            :param name:            知识库名称
             :param slug:             slug
-            :param toc:             更新文档仓库的目录信息
+            :param toc:             更新文档知识库的目录信息
             :param description:     说明
             :param public:          0 私密, 1 内网公开, 2 全网公开
             :param namespace:
             :param id:
-            :return:                 Optional[BookDetailSerializer]
+            :return:                Optional[BookDetailSerializer]
             """
             if is_blank(namespace) and is_blank(id):
                 message = MESSAGE_TEMPLATE_A.format(method_name="put_repos", p1="namespace", p2="id",
@@ -603,7 +626,7 @@ class SimplePyYuQueAPI(BaseAPI):
 
         def delete_repo(self, namespace: str = None, id: int = None) -> Optional[BookDeleteSerializer]:
             """
-            删除仓库
+            删除知识库
             DELETE /repos/:namespace
             # 或
             DELETE /repos/:id
@@ -622,7 +645,7 @@ class SimplePyYuQueAPI(BaseAPI):
 
         def repos_toc(self, namespace: str = None, id: int = None) -> Optional[RepoTocSerializerList]:
             """
-            获取一个仓库的目录结构
+            获取一个知识库的目录结构
             GET /repos/:namespace/toc
             # 或
             GET /repos/:id/toc
@@ -642,7 +665,7 @@ class SimplePyYuQueAPI(BaseAPI):
 
         def search_repos(self, q: str, type: Union[str, RepoType] = RepoType.BOOK) -> Optional[BookSerializerList]:
             """
-            基于关键字搜索仓库
+            基于关键字搜索知识库
             GET /search/repos?q=&type=
             :param q:       关键字，目前是简单的数据库模糊查询
             :param type:    类型 (Book, Design），注意大小写，不传搜索所有类型
@@ -658,7 +681,7 @@ class SimplePyYuQueAPI(BaseAPI):
 
         def get_repo(self, **kwargs) -> Optional[BookSerializerList]:
             """
-            获取用户或者企业仓库
+            获取用户或者企业知识库
             :param kwargs:
             :return:
             """
@@ -666,7 +689,7 @@ class SimplePyYuQueAPI(BaseAPI):
 
         def get_repos_detail(self, **kwargs) -> Optional[BookDetailSerializer]:
             """
-            获取仓库详情
+            获取知识库详情
             :param kwargs:
             :return:
             """
@@ -674,7 +697,7 @@ class SimplePyYuQueAPI(BaseAPI):
 
         def create_repos(self, **kwargs) -> Optional[BookSerializer]:
             """
-            创建仓库
+            创建知识库
             :param kwargs:
             :return:
             """
@@ -682,7 +705,7 @@ class SimplePyYuQueAPI(BaseAPI):
 
         def update_repos(self, **kwargs) -> Optional[BookDetailSerializer]:
             """
-            更新仓库
+            更新知识库
             :param kwargs:
             :return:
             """
@@ -858,21 +881,36 @@ class SimplePyYuQueAPI(BaseAPI):
 class SimplePyYuQueQuickAPI(SimplePyYuQueAPI):
     def __init__(self, token: str, app_name: str, **kwargs):
         super().__init__(token, app_name, **kwargs)
-        self._group = None
+        self._quick_user_structure = None
+        self._rebuild()
 
-    @property
-    def group(self) -> Optional[UserSerializer]:
-        return self._group
+    def _rebuild(self):
+        user_serializer = self.User().get_user()
+        if user_serializer is None:
+            return
+        group_serializer_list = self.Group().get_users_groups()
+        if is_not_blank(group_serializer_list):
+            return
 
-    def post_group(self, group_post_entity: GroupPostEntity):
-        self._group = self.Group().post_group(name=group_post_entity.name,
-                                              login=group_post_entity.login,
-                                              description=group_post_entity.description)
+        for group_serializer in group_serializer_list:
+            # 获取知识库详情
+            self.Repo().get_repos()
+            self.Repo().get_repo()
+
+
         return self
+if __name__ == '__main__':
+    simplePyYQ = SimplePyYuQueQuickAPI(token='', app_name="pyyuque")
 
-    # TODO
-    def update_group(self):
-        return self
+    # Group.login  <--> Repo.login
 
-    def post_repo(self,post_repo_entity:PostRepoEntity):
-        pass
+    groupName = "myGroupName"
+    userSerializer = simplePyYQ.Group().post_group(name=groupName, login="myGroupLogin", description="MyGroup")
+    print(userSerializer.base_response)
+    bookSerializer = simplePyYQ.Repo().post_groups_repos(name="myRepoName",
+                                                         slug="myRepoSlug",
+                                                         description="myRepoDescription",
+                                                         public=RepoPublic.PRIVATE,
+                                                         type=RepoType.BOOK,
+                                                         id=userSerializer.id)
+    print(bookSerializer.base_response)
