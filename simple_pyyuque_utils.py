@@ -21,7 +21,7 @@ logger.setLevel(level)
 IS_DEBUG = logger.level == logging.DEBUG
 
 
-def is_blank(value: Optional[Union[int, str, dict, list]]) -> bool:
+def is_blank(value: Optional[Union[int, str, dict, list, bytes, tuple]]) -> bool:
     if value is None:
         return True
     if isinstance(value, str):
@@ -30,10 +30,22 @@ def is_blank(value: Optional[Union[int, str, dict, list]]) -> bool:
         return True if len(value) < 1 else False
     if isinstance(value, list):
         return True if len(value) < 1 else False
+    if isinstance(value, bytes):
+        return True if value == b'' else False
+    # (None,None) ==> False
+    if isinstance(value, tuple):
+        if len(value) < 1:
+            return True
+        for i in value:
+            if i is not None:
+                return False
+        return True
+    if isinstance(value, set):
+        return True if len(value) < 1 else False
     return False
 
 
-def is_not_blank(value: Optional[Union[int, str, dict, list]]) -> bool:
+def is_not_blank(value: Optional[Union[int, str, dict, list, tuple,]]) -> bool:
     return not is_blank(value=value)
 
 

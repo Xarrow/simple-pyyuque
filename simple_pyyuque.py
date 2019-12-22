@@ -87,31 +87,31 @@ class BaseAPI(object):
     def get_request(self, source_name: str, res_type, **kwargs) -> Optional[Union[dict, BaseSerializer]]:
         res = self._api_request(method=RequestMethods.GET, source_name=source_name, **kwargs)
         if res_type is not None:
-            return None if res is None else res_type(res)
+            return res_type(res)
         return res
 
     def post_request(self, source_name: str, res_type, **kwargs) -> Optional[BaseSerializer]:
         res = self._api_request(method=RequestMethods.POST, source_name=source_name, **kwargs)
         if res_type is not None:
-            return None if res is None else res_type(res)
+            return res_type(res)
         return res
 
     def put_request(self, source_name: str, res_type, **kwargs) -> Optional[BaseSerializer]:
         res = self._api_request(method=RequestMethods.PUT, source_name=source_name, **kwargs)
         if res_type is not None:
-            return None if res is None else res_type(res)
+            return res_type(res)
         return res
 
     def delete_request(self, source_name: str, res_type, **kwargs) -> Optional[BaseSerializer]:
         res = self._api_request(method=RequestMethods.DELETE, source_name=source_name, **kwargs)
         if res_type is not None:
-            return None if res is None else res_type(res)
+            return res_type(res)
         return res
 
     def head_request(self, source_name: str, res_type, **kwargs) -> Optional[dict]:
         res = self._api_request(method=RequestMethods.HEAD, source_name=source_name, **kwargs)
         if res_type is not None:
-            return None if res is None else res_type(res)
+            return res_type(res)
         return res
 
 
@@ -415,7 +415,7 @@ class SimplePyYuQueAPI(BaseAPI):
         def get_users_repos(self,
                             type: Union[RepoType, str] = RepoType.ALL,
                             include_membered: bool = False,
-                            offset: int = 1,
+                            offset: int = 0,
                             login: str = None,
                             id: int = None) -> Optional[BookSerializerList]:
             """
@@ -435,8 +435,9 @@ class SimplePyYuQueAPI(BaseAPI):
                 message = MESSAGE_TEMPLATE_A.format(method_name="get_users_repos", p1="login", p2="id",
                                                     doc_uri="https://www.yuque.com/yuque/developer/repo")
                 raise YuQueAPIException(message)
-            params = {"type": type.value if isinstance(type, RepoType) else type, "include_membered": include_membered,
-                      "offset": offset}
+            params = {"type": type.value,
+                      "offset": offset,
+                      'include_membered': include_membered}
             return self.yuque_api.get_request(
                 source_name="/users/{}/repos".format(login if is_not_blank(login) else id),
                 res_type=BookSerializerList,
@@ -717,13 +718,23 @@ class SimplePyYuQueAPI(BaseAPI):
         def get_repos_docs(self,
                            namespace: str = None,
                            id: int = None) -> Optional[DocSerializerList]:
+            """
+            获取知识库下的文档
+            :param namespace:
+            :param id:
+            :return:
+            """
             if is_blank(namespace) and is_blank(id):
                 raise YuQueAPIException("#repo_docs , namespace and id can not both be blank !")
             return self.yuque_api.get_request(
                 source_name="/repos/{}/docs".format(namespace if is_not_blank(namespace) else id),
                 res_type=DocSerializerList)
 
-        def get_repos_docs_detail(self, namespace: str = None, slug: str = None, repo_id: str = None, id: int = None,
+        def get_repos_docs_detail(self,
+                                  namespace: str = None,
+                                  slug: str = None,
+                                  repo_id: str = None,
+                                  id: int = None,
                                   raw: Union[int, DocRaw] = DocRaw.MARKDOWN) -> Optional[DocDetailSerializer]:
             """
             获取单篇文档的详细信息
@@ -738,21 +749,27 @@ class SimplePyYuQueAPI(BaseAPI):
             :param raw: 	raw=1 返回 Markdown 格式文本； 其他则返回 HTML 格式的富文本
             :return:
             """
-            if is_blank(namespace) and is_blank(id):
+            if is_blank(namespace) and is_blank(repo_id):
                 message = MESSAGE_TEMPLATE_A.format(method_name="repos_docs_detail",
                                                     p1="namespace", p2="repo_id",
                                                     doc_uri="https://www.yuque.com/yuque/developer/doc")
                 raise YuQueAPIException(message)
 
-            if is_not_blank(namespace) and is_blank(slug):
+            if is_blank(slug) and is_blank(id):
                 message = MESSAGE_TEMPLATE_A.format(method_name="repos_docs_detail",
-                                                    p1="namespace", p2="slug",
+                                                    p1="slug", p2="id",
+                                                    doc_uri="https://www.yuque.com/yuque/developer/doc")
+                raise YuQueAPIException(message)
+
+            if is_not_blank(namespace) and is_blank(slug):
+                message = MESSAGE_TEMPLATE_B.format(method_name="repos_docs_detail",
+                                                    p1="slug",
                                                     doc_uri="https://www.yuque.com/yuque/developer/doc")
                 raise YuQueAPIException(message)
 
             if is_not_blank(repo_id) and is_blank(id):
-                message = MESSAGE_TEMPLATE_A.format(method_name="repos_docs_detail",
-                                                    p1="repo_id", p2="id",
+                message = MESSAGE_TEMPLATE_B.format(method_name="repos_docs_detail",
+                                                    p1="id",
                                                     doc_uri="https://www.yuque.com/yuque/developer/doc")
                 raise YuQueAPIException(message)
 
@@ -881,36 +898,107 @@ class SimplePyYuQueAPI(BaseAPI):
 class SimplePyYuQueQuickAPI(SimplePyYuQueAPI):
     def __init__(self, token: str, app_name: str, **kwargs):
         super().__init__(token, app_name, **kwargs)
-        self._quick_user_structure = None
-        self._rebuild()
+        self._quick_user_structure = QuickUserStructure()
+        self._build()
 
-    def _rebuild(self):
-        user_serializer = self.User().get_user()
-        if user_serializer is None:
-            return
-        group_serializer_list = self.Group().get_users_groups()
-        if is_not_blank(group_serializer_list):
-            return
+    @property
+    def user_structure(self) -> Optional[UserSerializer]:
+        return self._quick_user_structure.user_serializer
 
-        for group_serializer in group_serializer_list:
-            # 获取知识库详情
-            self.Repo().get_repos()
-            self.Repo().get_repo()
+    @property
+    def user_repo_structure_list(self) -> List[QuickRepoStructure]:
+        return self._quick_user_structure.quick_repo_structure_list or []
 
+    @property
+    def user_doc_structure_list(self) -> List[QuickDocStructure]:
+        return [] if is_blank(self._quick_user_structure.quick_repo_structure_list) \
+            else [doc.quick_doc_structure_list for doc in
+                  self._quick_user_structure.quick_repo_structure_list]
 
+    @property
+    def group_structure_list(self) -> List[QuickGroupStructure]:
+        return self._quick_user_structure.quick_group_structure_list
+
+    @property
+    def group_repo_structure_list(self) -> List[QuickRepoStructure]:
+        return [] if is_blank(self._quick_user_structure.quick_group_structure_list) else \
+            [group.quick_repo_structure_list for group in self._quick_user_structure.quick_group_structure_list]
+
+    @property
+    def group_doc_structure_list(self) -> List[QuickDocStructure]:
+        if is_blank(self._quick_user_structure.quick_group_structure_list):
+            return []
+        repo_list = [group.quick_repo_structure_list for group in self._quick_user_structure.quick_group_structure_list]
+        if is_blank(repo_list):
+            return []
+        return [doc.quick_doc_structure_list for doc in repo_list]
+
+    def at_user(self, login: str = None, id: int = None):
+        if is_blank(login) and is_blank(id):
+            user_serializer = self.User().user
+        else:
+            user_serializer = self.User().get_users(id=id)
+        self._quick_user_structure.user_serializer = user_serializer
         return self
+
+    def at_user_repo(self, login: str = None, id: int = None):
+        if is_blank(login) and is_blank(id):
+            repo_list = self.Repo().get_users_repos(
+                id=self._quick_user_structure.user_serializer.id).book_serializer_list
+        else:
+            repo_list = self.Repo().get_users_repos(login=login, id=id).book_serializer_list
+        if repo_list is None:
+            return self
+
+        quick_repo_list = []
+        for repo in repo_list:
+            repo_detail = self.Repo().get_repos(id=repo.id)
+            quick_repo = QuickRepoStructure(repo_detail_serializer=repo_detail, repo_serializer=repo)
+            quick_repo_list.append(quick_repo)
+
+        self._quick_user_structure.quick_repo_structure_list = repo_list
+        return self
+
+    def _build(self):
+        quick_user = self._quick_user_structure or QuickUserStructure()
+        quick_user.user_serializer = self.User().user
+        # TODO
+        # 团队
+
+        # 个人
+        repo_list = self.Repo().get_users_repos(login=self.User().user.name,
+                                                id=self.User().user.id).book_serializer_list
+        quick_repo_list = []
+        for repo in repo_list:
+            print("Repo基础")
+            print(repo.base_response)
+            repo_detail = self.Repo().get_repos(id=repo.id)
+            print("Repo详细")
+            print(repo_detail.base_response)
+            quick_repo = QuickRepoStructure(repo_detail_serializer=repo_detail, repo_serializer=repo)
+            quick_repo_list.append(quick_repo)
+
+            doc_list = self.Doc().get_repos_docs(id=repo.id).doc_serializer_list
+            quick_doc_list = []
+            for doc in doc_list:
+                print("Doc基础")
+                print(doc.base_response)
+                doc_detail = self.Doc().get_repos_docs_detail(id=doc.id, repo_id=repo.id)
+                print("Doc详细")
+                print(doc_detail.base_response)
+
+                quick_doc = QuickDocStructure(doc_serializer=doc, doc_detail_serializer=doc_detail)
+                quick_doc_list.append(quick_doc)
+            quick_repo.quick_doc_structure_list = quick_doc_list
+
+        quick_user.quick_repo_structure_list = quick_repo_list
+        self._quick_user_structure = quick_user
+        return self
+
+
 if __name__ == '__main__':
-    simplePyYQ = SimplePyYuQueQuickAPI(token='', app_name="pyyuque")
-
-    # Group.login  <--> Repo.login
-
-    groupName = "myGroupName"
-    userSerializer = simplePyYQ.Group().post_group(name=groupName, login="myGroupLogin", description="MyGroup")
-    print(userSerializer.base_response)
-    bookSerializer = simplePyYQ.Repo().post_groups_repos(name="myRepoName",
-                                                         slug="myRepoSlug",
-                                                         description="myRepoDescription",
-                                                         public=RepoPublic.PRIVATE,
-                                                         type=RepoType.BOOK,
-                                                         id=userSerializer.id)
-    print(bookSerializer.base_response)
+    simplePyYQ = SimplePyYuQueQuickAPI(token='LIpEyM947oR2ZjmEdgCd6ByKPQUlLd39UrrtXVlS', app_name="pyyuque")
+    simplePyYQ._build()
+    print(simplePyYQ.user_structure)
+    print(simplePyYQ.user_repo_structure_list)
+    print(simplePyYQ.user_doc_structure_list)

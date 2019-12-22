@@ -197,7 +197,7 @@ class BookSerializer(BaseSerializer):
     # slug - 仓库路径
     @property
     def slug(self) -> Optional[int]:
-        return self.base_response.get("slug ") if self.base_response is not None else None
+        return self.base_response.get("slug") if self.base_response is not None else None
 
     # name - 名称
     @property
@@ -207,7 +207,7 @@ class BookSerializer(BaseSerializer):
     # namespace - 仓库完整路径 user.login/book.slug
     @property
     def namespace(self) -> Optional[str]:
-        return self.base_response.get("namespace ") if self.base_response is not None else None
+        return self.base_response.get("namespace") if self.base_response is not None else None
 
     # user - <UserSerializer>
     @property
@@ -226,7 +226,7 @@ class BookSerializer(BaseSerializer):
     # creator_id - 创建人 User Id
     @property
     def creator_id(self) -> Optional[int]:
-        return self.base_response.get("creator_id ") if self.base_response is not None else None
+        return self.base_response.get("creator_id") if self.base_response is not None else None
 
     # public - 公开状态 [1 - 公开, 0 - 私密]
     @property
@@ -236,12 +236,12 @@ class BookSerializer(BaseSerializer):
     # likes_count - 喜欢数量
     @property
     def likes_count(self) -> Optional[int]:
-        return self.base_response.get("likes_count ") if self.base_response is not None else None
+        return self.base_response.get("likes_count") if self.base_response is not None else None
 
     # watches_count - 订阅数量
     @property
     def watches_count(self) -> Optional[int]:
-        return self.base_response.get("watches_count ") if self.base_response is not None else None
+        return self.base_response.get("watches_count") if self.base_response is not None else None
 
     @property
     def content_updated_at(self) -> Optional[str]:
@@ -782,9 +782,9 @@ class DocSerializerList(BaseSerializer):
         super().__init__(base_response)
 
     @property
-    def doc_serializer_list(self) -> Optional[List[UserSerializer]]:
+    def doc_serializer_list(self) -> List[DocSerializer]:
         return [DocSerializer(doc_response=doc) for doc in
-                self.base_response] if self.base_response is not None else None
+                self.base_response] if self.base_response is not None else []
 
 
 class BookSerializerList(BaseSerializer):
@@ -792,9 +792,9 @@ class BookSerializerList(BaseSerializer):
         super().__init__(base_response)
 
     @property
-    def book_serializer_list(self) -> Optional[List[BookSerializer]]:
-        return [BaseSerializer(base_response=book) for book in
-                self.base_response] if self.base_response is not None else None
+    def book_serializer_list(self) -> List[BookSerializer]:
+        return [BookSerializer(book) for book in
+                self.base_response] if self.base_response is not None else []
 
 
 class UserSerializerList(BaseSerializer):
@@ -802,9 +802,9 @@ class UserSerializerList(BaseSerializer):
         super().__init__(base_response)
 
     @property
-    def user_serializer_list(self) -> Optional[List[UserSerializer]]:
+    def user_serializer_list(self) -> List[UserSerializer]:
         return [UserSerializer(user_response=user) for user in
-                self.base_response] if self.base_response is not None else None
+                self.base_response] if self.base_response is not None else []
 
 
 class RepoTocSerializerList(BaseSerializer):
@@ -812,9 +812,9 @@ class RepoTocSerializerList(BaseSerializer):
         super().__init__(base_response)
 
     @property
-    def repo_toc_serializer_list(self) -> Optional[List[RepoTocSerializer]]:
+    def repo_toc_serializer_list(self) -> List[RepoTocSerializer]:
         return [RepoTocSerializer(repo_toc_response=rt_response) for rt_response in
-                self.base_response] if self.base_response is not None else None
+                self.base_response] if self.base_response is not None else []
 
 
 class DocDetailSerializerList(BaseSerializer):
@@ -861,14 +861,15 @@ class QuickDocStructure(object):
 
 
 class QuickRepoStructure(object):
-    def __init__(self, quick_doc_structure_list: List[QuickDocStructure] = None,
-                 book_serializer: BookSerializer = None,
-                 book_detail_serializer: BookDetailSerializer = None
-                 ):
+    def __init__(self,
+                 quick_doc_structure_list: List[QuickDocStructure] = None,
+                 repo_serializer: BookSerializer = None,
+                 repo_detail_serializer: BookDetailSerializer = None):
         self._quick_doc_structure_list = quick_doc_structure_list or []
-        self._book_serializer = book_serializer
-        self._book_detail_serializer = book_detail_serializer
+        self._repo_serializer = repo_serializer
+        self._repo_detail_serializer = repo_detail_serializer
 
+    # Doc List
     @property
     def quick_doc_structure_list(self):
         return self._quick_doc_structure_list
@@ -880,21 +881,23 @@ class QuickRepoStructure(object):
     def add_quick_doc_structure(self, quick_doc_structure):
         self._quick_doc_structure_list.append(quick_doc_structure)
 
+    # Repo Detail
     @property
-    def book_detail_serializer(self):
-        return self._book_detail_serializer
+    def repo_detail_serializer(self):
+        return self._repo_detail_serializer
 
-    @book_detail_serializer.setter
-    def book_detail_serializer(self, book_detail_serializer):
-        self._book_detail_serializer = book_detail_serializer
+    @repo_detail_serializer.setter
+    def repo_detail_serializer(self, repo_detail_serializer):
+        self._repo_detail_serializer = repo_detail_serializer
 
+    # Repo Basic
     @property
-    def book_serializer(self):
-        return self._book_serializer
+    def repo_serializer(self):
+        return self._repo_serializer
 
-    @book_serializer.setter
-    def book_serializer(self, book_serializer):
-        self._book_serializer = book_serializer
+    @repo_serializer.setter
+    def repo_serializer(self, repo_serializer):
+        self._repo_serializer = repo_serializer
 
 
 class QuickGroupStructure(object):
@@ -924,18 +927,31 @@ class QuickGroupStructure(object):
 class QuickUserStructure(object):
     def __init__(self,
                  quick_group_structure_list: List[QuickGroupStructure] = None,
+                 quick_repo_structure_list: List[QuickRepoStructure] = None,
                  user_serializer: UserSerializer = None):
         self._quick_group_structure_list = quick_group_structure_list or []
-        self._user_serializer = user_serializer
+        self._quick_repo_structure_list = quick_repo_structure_list or []
+        self._user_serializer = user_serializer or None
 
+    # Group
     @property
-    def quick_group_structure_list(self):
+    def quick_group_structure_list(self) -> List[QuickGroupStructure]:
         return self._quick_group_structure_list
 
     @quick_group_structure_list.setter
     def quick_group_structure_list(self, quick_group_structure_list):
         self._quick_group_structure_list = quick_group_structure_list
 
+    # Repo
+    @property
+    def quick_repo_structure_list(self) -> List[QuickRepoStructure]:
+        return self._quick_repo_structure_list
+
+    @quick_repo_structure_list.setter
+    def quick_repo_structure_list(self, quick_repo_structure_list):
+        self._quick_repo_structure_list = quick_repo_structure_list
+
+    # User
     @property
     def user_serializer(self):
         return self._user_serializer
