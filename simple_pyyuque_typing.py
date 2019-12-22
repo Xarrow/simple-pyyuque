@@ -10,6 +10,8 @@
 from typing import Optional, Union, List
 from enum import Enum
 
+YUQUE_MAIN_URL = "https://www.yuque.com/"
+
 STATUS_CODE_MAPPING = {
     200: "成功",
     400: "请求的参数不正确，或缺少必要信息，请对比文档",
@@ -142,6 +144,18 @@ class UserSerializer(BaseSerializer):
         return self.user_response.get('type') if self.user_response is not None else None
 
     @property
+    def space_id(self):
+        return self.user_response.get('space_id') if self.user_response is not None else None
+
+    @property
+    def account_id(self):
+        return self.user_response.get('account_id') if self.user_response is not None else None
+
+    @property
+    def login(self):
+        return self.user_response.get('login') if self.user_response is not None else None
+
+    @property
     def name(self):
         return self.user_response.get('name') if self.user_response is not None else None
 
@@ -154,12 +168,50 @@ class UserSerializer(BaseSerializer):
         return self.user_response.get('avatar_url') if self.user_response is not None else None
 
     @property
+    def large_avatar_url(self):
+        return self.user_response.get('large_avatar_url') if self.user_response is not None else None
+
+    @property
+    def medium_avatar_url(self):
+        return self.user_response.get('medium_avatar_url') if self.user_response is not None else None
+
+    @property
+    def small_avatar_url(self):
+        return self.user_response.get('small_avatar_url') if self.user_response is not None else None
+
+    @property
+    def book_count(self):
+        return self.user_response.get('book_count') if self.user_response is not None else None
+
+    @property
+    def public_books_count(self):
+        return self.user_response.get('public_books_count') if self.user_response is not None else None
+
+    @property
+    def follower_count(self):
+        return self.user_response.get('follower_count') if self.user_response is not None else None
+
+    @property
+    def following_count(self):
+        return self.user_response.get('following_count') if self.user_response is not None else None
+
+    @property
+    def public(self):
+        return self.user_response.get('public') if self.user_response is not None else None
+
+    @property
     def created_at(self):
         return self.user_response.get('created_at') if self.user_response is not None else None
 
     @property
     def updated_at(self):
         return self.user_response.get('updated_at') if self.user_response is not None else None
+
+    @property
+    def web_link(self):
+        if self.name is None:
+            return None
+        return "{0}/{1}".format(YUQUE_MAIN_URL, self.login)
 
     def __repr__(self):
         return 'UserSerializer=(id={!r},type={!r},{!r} ,description={!r},acatar_url={!r},created_at={!r},upadate_at={' \
@@ -260,6 +312,12 @@ class BookSerializer(BaseSerializer):
     @property
     def user_login(self) -> Optional[int]:
         return self.base_response.get("user.login") if self.base_response is not None else None
+
+    @property
+    def web_link(self):
+        if self.namespace is None:
+            return None
+        return "{0}/{1}".format(YUQUE_MAIN_URL, self.namespace)
 
     # TODO
     def __repr__(self):

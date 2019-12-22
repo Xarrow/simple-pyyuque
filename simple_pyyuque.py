@@ -16,7 +16,6 @@ import requests
 from simple_pyyuque_typing import *
 from simple_pyyuque_utils import *
 
-YUQUE_MAIN_URL = "https://www.yuque.com/"
 BASIC_URL = 'https://www.yuque.com/api/v2/'
 MESSAGE_TEMPLATE_A = """# {method_name} , `{p1}` and `{p2}` can not both be blank ! For further API detail please 
 visit `{doc_uri}` """
@@ -959,6 +958,18 @@ class SimplePyYuQueQuickAPI(SimplePyYuQueAPI):
         self._quick_user_structure.quick_repo_structure_list = repo_list
         return self
 
+    def at_user_doc(self):
+        pass
+
+    def at_group(self):
+        pass
+
+    def at_group_repo(self):
+        pass
+
+    def at_group_doc(self):
+        pass
+
     def _build(self):
         quick_user = self._quick_user_structure or QuickUserStructure()
         quick_user.user_serializer = self.User().user
@@ -998,7 +1009,8 @@ class SimplePyYuQueQuickAPI(SimplePyYuQueAPI):
 
 if __name__ == '__main__':
     simplePyYQ = SimplePyYuQueQuickAPI(token='LIpEyM947oR2ZjmEdgCd6ByKPQUlLd39UrrtXVlS', app_name="pyyuque")
-    simplePyYQ._build()
-    print(simplePyYQ.user_structure)
-    print(simplePyYQ.user_repo_structure_list)
-    print(simplePyYQ.user_doc_structure_list)
+    simplePyYQ.Repo().get_users_repos(login='mygrouplogin')
+    simplePyYQ.Doc().get_repos_docs(namespace='mygrouplogin/myreposlug')
+    # print(simplePyYQ.user_structure)
+    # print(simplePyYQ.user_repo_structure_list)
+    # print(simplePyYQ.user_doc_structure_list)
