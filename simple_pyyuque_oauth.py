@@ -65,6 +65,8 @@ class _EmbedServer(BaseHTTPRequestHandler, ABC):
 class SimpleYuQueOAuth(_EmbedServer):
     def exchange_token(self, code, state: str = None):
         print(code, state)
+        self.server().shutdown()
+        self.server.shutdown()
 
     def request_authorize(self):
         res = requests.get(YUQUE_OAUTH_AUTHORIZE_URL,
