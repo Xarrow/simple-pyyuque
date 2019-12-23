@@ -10,7 +10,6 @@
 import logging
 import random
 from typing import Optional, Union
-from urllib.parse import urlencode
 
 level = logging.DEBUG
 format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -20,6 +19,13 @@ logger = logging.getLogger(__name__)
 logger.setLevel(level)
 
 IS_DEBUG = logger.level == logging.DEBUG
+
+YUQUE_OAUTH_AUTHORIZE_URL = "https://www.yuque.com/oauth2/authorize"
+YUQUE_OAUTH_EXCHANGE_TOKEN_URL = 'https://www.yuque.com/oauth2/token'
+YUQUE_BASIC_V2_API_URL = 'https://www.yuque.com/api/v2/'
+
+MESSAGE_TEMPLATE_A = """# {method_name} , `{p1}` and `{p2}` can not both be blank ! For further API detail please visit `{doc_uri}` """
+MESSAGE_TEMPLATE_B = """# {method_name} , `{p1}` is not blank ! For further API detail please visit `{doc_uri}` """
 
 
 def is_blank(value: Optional[Union[int, str, dict, list, bytes, tuple]]) -> bool:
@@ -65,32 +71,3 @@ def generate_slug() -> str:
 
 def generate_random_code() -> str:
     return generate_random_string_with_digest(40)
-
-
-import hashlib
-import hmac
-import time
-import base64
-import requests
-
-
-# https://www.yuque.com/oauth2/authorize?client_id=TSJjgMa1QIj5acgAHcvF&scope=doc,repo,group:read&redirect_uri=http://localhost:7777/yuqueCallback&state=2&response_type=code
-def sign(query: dict, secret: str) -> str:
-    urlencode_string = urlencode(query=query, encoding='utf-8')
-    print(urlencode_string)
-    dig = hmac.new(key=b"jr700ZxttSJeZmJllJFC3qGn659zRLMeUOSlWdJF",
-                   msg=bytes(urlencode_string, encoding='utf-8'),
-                   digestmod=hashlib.sha1).digest()
-    return base64.b64encode(dig).decode()
-
-
-if __name__ == '__main__':
-    random_code = generate_random_code()
-    query_map = {"client_id": "TSJjgMa1QIj5acgAHcvF", "code": random_code, "response_type": "code",
-                 "scope": "doc,repo,group:read", "timestamp": str(int(time.time() * 1000))}
-    sign = (sign(query=query_map, secret="jr700ZxttSJeZmJllJFC3qGn659zRLMeUOSlWdJF"))
-    query_map['sign'] = sign
-    print(query_map)
-    print('https://www.yuque.com/oauth2/authorize?'+urlencode(query_map))
-    res = requests.get(url='https://www.yuque.com/oauth2/authorize', params=query_map, )
-    print(res.text)

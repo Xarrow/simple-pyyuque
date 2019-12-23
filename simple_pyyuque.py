@@ -12,14 +12,11 @@
 """
 
 import asyncio
+
 import requests
+
 from simple_pyyuque_typing import *
 from simple_pyyuque_utils import *
-
-BASIC_URL = 'https://www.yuque.com/api/v2/'
-MESSAGE_TEMPLATE_A = """# {method_name} , `{p1}` and `{p2}` can not both be blank ! For further API detail please 
-visit `{doc_uri}` """
-MESSAGE_TEMPLATE_B = """# {method_name} , `{p1}` is not blank ! For further API detail please visit `{doc_uri}` """
 
 
 class YuQueAPIException(Exception):
@@ -54,7 +51,7 @@ class BaseAPI(object):
             kwargs['method'] = method.value
 
         kwargs['url'] = \
-            BASIC_URL + (source_name if not source_name.startswith("/") else source_name[1:len(source_name)])
+            YUQUE_BASIC_V2_API_URL + (source_name if not source_name.startswith("/") else source_name[1:len(source_name)])
         kwargs['headers'] = self._headers
 
         if IS_DEBUG:
