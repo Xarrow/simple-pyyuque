@@ -8,6 +8,8 @@ verify_ssl = true
 [packages]
 requests = "*"
 pytest = "*"
+pyppeteer = "*"
+selenium = "*"
 
 [requires]
 python_version = "3.6"

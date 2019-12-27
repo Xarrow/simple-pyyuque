@@ -1,0 +1,25 @@
+权限范围（scope）列表
+scope
+描述
+default
+token 默认拥有的权限，只能获取用户信息（不包含手机号和邮箱）
+group
+修改和读取你的团队
+group:read
+读取你的团队信息
+repo
+修改和读取你的知识库
+repo:read
+读取你的知识库
+topic
+修改和读取你的主题
+topic:read
+读取你的主题
+doc
+修改和读取你的文档
+doc:read
+读取你的文档
+artboard
+修改和读取你的画板
+artboard:read
+读取你的画板

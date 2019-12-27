@@ -19,16 +19,6 @@ from simple_pyyuque_typing import *
 from simple_pyyuque_utils import *
 
 
-class YuQueAPIException(Exception):
-    def __init__(self, message) -> None:
-        self.message = message
-
-
-class YuQueAPIUnauthorized(Exception):
-    def __init__(self, message) -> None:
-        self.message = message
-
-
 class BaseAPI(object):
     __slots__ = ['_session', '_loop', '_token', '_app_name', '_headers']
 
@@ -42,6 +32,8 @@ class BaseAPI(object):
             'User-agent': self._app_name,
             'Content-Type': 'application/x-www-form-urlencoded',
             'X-Auth-Token': self._token
+
+            # PI//ucsAYu0rogOlbMvL9jsVqRbkenxCVxlkiSFRNAngUMUmyAxktqR8Fi/2Z5FQbfGYNPM7OW171HjWKnRdZYRHJm+r8RGkC465uuXTrCCh06Fb22VkoDl0CidDd9nBYcxMvD70YPBRk+7p8CUhKWT+3OR5dmuHMJF+zeB1WQU=
         }
 
     def _api_request(self, method: object, source_name: str, **kwargs) -> Optional[dict]:
@@ -51,7 +43,8 @@ class BaseAPI(object):
             kwargs['method'] = method.value
 
         kwargs['url'] = \
-            YUQUE_BASIC_V2_API_URL + (source_name if not source_name.startswith("/") else source_name[1:len(source_name)])
+            YUQUE_BASIC_V2_API_URL + (
+                source_name if not source_name.startswith("/") else source_name[1:len(source_name)])
         kwargs['headers'] = self._headers
 
         if IS_DEBUG:

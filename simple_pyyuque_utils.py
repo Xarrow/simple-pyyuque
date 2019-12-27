@@ -11,6 +11,10 @@ import logging
 import random
 from typing import Optional, Union
 
+import os
+
+import sys
+
 level = logging.DEBUG
 format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 datefmt = '%Y-%m-%d %H:%M'
@@ -71,3 +75,28 @@ def generate_slug() -> str:
 
 def generate_random_code() -> str:
     return generate_random_string_with_digest(40)
+
+
+class YuQueAPIException(Exception):
+    def __init__(self, message) -> None:
+        self.message = message
+
+
+class YuQueAPIUnauthorized(Exception):
+    def __init__(self, message) -> None:
+        self.message = message
+
+
+class PersistentCallbackBaseException(Exception):
+    def __init__(self, message) -> None:
+        self.message = message
+
+
+import platform
+
+WINDOWS = 'windows' in platform.platform()
+LINUX = sys.platform.startswith('linux')
+DARWIN = sys.platform.startswith('darwin')
+
+DEBIAN = 'debian' in platform.platform()
+CENTOS = 'centos' in platform.platform()
