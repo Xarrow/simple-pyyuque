@@ -453,6 +453,11 @@ doc_api.delete_docs(repo_id=189411, id=1057879).base_response
 
 
 ----
+# 版本说明
+
+* v0.1.1 初始化
+* v0.1.3 修复部分 bug ， 新增语雀更新字段，为下一个版本更新准备
+
 # 问题排查
 
 TODO：

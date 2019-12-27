@@ -375,21 +375,6 @@ class SimpleYuQueOAuth4Server(BaseAuth):
                 raise ex
         return self
 
-    # TODO
-    def upload_attach(self, local_file_path: str = None, description: str = None):
-        upload_attach_api = "{0}/{1}".format(YUQUE_BASIC_V2_API_URL, "upload/attach")
-        _headers = {
-            'User-agent': 'yuqueapp',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-Auth-Token': self._token_map.get("access_token")
-        }
-        res = requests.post(url=upload_attach_api, headers=_headers,
-                            data={"Key": "aaaaa"},
-                            files={"file": open(r'C:\Users\wb-zj268791\Pictures\nature-1510499378825-9667.jpg',
-                                                mode='rb', )})
-        print(res.text)
-        pass
-
     def get_token(self):
         #  内存中存在
         if is_not_blank(self._token_map):

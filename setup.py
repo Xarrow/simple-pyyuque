@@ -57,7 +57,7 @@ class UploadCommand(Command):
 
 
 setup(
-    version="0.1.2",
+    version="0.1.3",
     long_description=long_description,
     long_description_content_type="text/markdown",
     name="simple_pyyuque",
@@ -86,9 +86,4 @@ setup(
     cmdclass={
         'upload': UploadCommand,
     },
-    # packing to command tool interface
-    # entry_points={
-    #     'console_scripts': ['weibo-scraper=weibo_scraper:cli']
-    # }
-
 )
