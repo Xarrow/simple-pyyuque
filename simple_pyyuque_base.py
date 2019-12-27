@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+from simple_pyyuque_utils import *
 
 
 class PersistentCallbackBase(object):
@@ -86,6 +87,8 @@ class PersistentCallbackBase(object):
 
     def do_fetch(self):
         raise Exception("not implement")
+
+
 class BaseAuth(object):
     def __init__(self):
         self._auth_valid: bool = False
