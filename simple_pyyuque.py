@@ -995,12 +995,3 @@ class SimplePyYuQueQuickAPI(SimplePyYuQueAPI):
         quick_user.quick_repo_structure_list = quick_repo_list
         self._quick_user_structure = quick_user
         return self
-
-
-if __name__ == '__main__':
-    simplePyYQ = SimplePyYuQueQuickAPI(token='LIpEyM947oR2ZjmEdgCd6ByKPQUlLd39UrrtXVlS', app_name="pyyuque")
-    simplePyYQ.Repo().get_users_repos(login='mygrouplogin')
-    simplePyYQ.Doc().get_repos_docs(namespace='mygrouplogin/myreposlug')
-    # print(simplePyYQ.user_structure)
-    # print(simplePyYQ.user_repo_structure_list)
-    # print(simplePyYQ.user_doc_structure_list)

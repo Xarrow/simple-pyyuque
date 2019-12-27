@@ -410,21 +410,3 @@ class SimpleYuQueOAuth4Server(BaseAuth):
         except Exception as ex:
             print(ex)
         return self._token_map
-
-
-if __name__ == '__main__':
-    # Sample1
-    # a = SimpleYuQueOAuth4Server(client_id="TSJjgMa1QIj5acgAHcvF",
-    #                             secret_id="jr700ZxttSJeZmJllJFC3qGn659zRLMeUOSlWdJF",
-    #                             open_in_console=True,
-    #                             persistent_path="tPQq3FWFFjEcocYwSxupDCxalQZX2MQa1nBHesWXaaa.json",
-    #                             persistent_callback=JsonPersistentCallback)
-    # print(a.get_token())
-
-    b = SimpleYuQueSimulateLogin(SimpleYuQueSimulateLoginOption(username="13515105572",
-                                                                password="Yuious123",
-                                                                is_debug=True,
-                                                                webdriver_execute_path=r"D:\software\brower_driver\chromedriver_win32\chromedriver.exe")
-                                 .prepare_options())
-    b.express()
-
