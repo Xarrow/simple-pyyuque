@@ -27,7 +27,7 @@ class StatusCode(Enum):
     PARAMETERS_ERROR = {"code": 400, "message": "请求的参数不正确，或缺少必要信息，请对比文档", }
     AUTH_ERROR = {"code": 401, "message": "需要用户认证的接口用户信息不正确", }
     PERMISSION_ERROR = {"code": 403, "message": "缺少对应功能的权限", }
-    DATA_NOT_REALASE = {"code": 404, "message": "数据不存在，或未开放", }
+    DATA_NOT_RELEASE = {"code": 404, "message": "数据不存在，或未开放", }
     SERVER_OPS = {"code": 500, "message": "服务器异常", }
 
 
